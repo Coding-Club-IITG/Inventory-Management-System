@@ -1,9 +1,11 @@
 import React from 'react'
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
+import Navbar from '../components/Navbar';
 const Home = () => {
     return (
         <>
+            <Navbar />
             <div className='h-screen flex flex-col justify-center items-center border gap-12'>
                 <h2 className='font-bold text-[5rem]'>Home Page</h2>
                 <Button variant="contained">

@@ -1,0 +1,64 @@
+.searchbar {
+  height: 30px;
+  width: 280px;
+  margin-right: 4px;
+  padding-left: 8px;
+}
+
+.addbtn {
+  align-items: center;
+  cursor: pointer;
+  height: 30px;
+  display: flex;
+  background-color: rgb(111, 190, 243);
+  border: none;
+  padding: 3px 22px;
+  text-align: center;
+  text-decoration: none;
+
+  font-size: 13px;
+  margin: auto;
+  margin-left: 1px;
+}
+
+.addbtn:hover {
+  background-color: #154f91;
+}
+
+.active,
+.dropbtn {
+  padding: top 20px;
+  margin-top: 3px;
+}
+
+.active:hover,
+.dropbtn:hover {
+  background-color: rgb(136, 139, 141);
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: rgb(3, 37, 56);
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  float: none;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* 
+.dropdown {
+  float: center;
+  overflow: hidden;
+} */

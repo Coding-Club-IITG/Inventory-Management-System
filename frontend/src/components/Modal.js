@@ -19,7 +19,9 @@ import Select from '@mui/material/Select';
 export default function Modal() {
     const [openRequest, setOpenRequest] = useState(false);
     const [openAddModal, setOpenAddModal] = useState(false);
-    const [value, setValue] = React.useState(dayjs());
+    const [startValue, setStartValue] = React.useState(dayjs());
+    const [endValue, setEndValue] = React.useState(dayjs());
+    const [purchaseDate, setPurchaseDate] = React.useState(dayjs());
     const [ownedBy, setOwnedBy] = React.useState('');
     const [category, setCategory] = React.useState('');
     const handleOwnership = (event) => {
@@ -78,17 +80,17 @@ export default function Modal() {
                             <DateTimePicker
                                 renderInput={(props) => <TextField {...props} />}
                                 label="From"
-                                value={value}
+                                value={startValue}
                                 onChange={(newValue) => {
-                                    setValue(newValue);
+                                    setStartValue(newValue);
                                 }}
                             />
                             <DateTimePicker
                                 renderInput={(props) => <TextField {...props} />}
                                 label="To"
-                                value={value}
+                                value={endValue}
                                 onChange={(newValue) => {
-                                    setValue(newValue);
+                                    setEndValue(newValue);
                                 }}
                             />
                         </div>
@@ -132,9 +134,9 @@ export default function Modal() {
                                 <DateTimePicker
                                     renderInput={(props) => <TextField {...props} />}
                                     label="Purchase Date"
-                                    value={value}
+                                    value={purchaseDate}
                                     onChange={(newValue) => {
-                                        setValue(newValue);
+                                        setPurchaseDate(newValue);
                                     }}
                                 />
                             </div>
