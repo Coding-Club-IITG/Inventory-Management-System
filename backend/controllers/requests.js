@@ -4,6 +4,7 @@ const User = require("../models/userSchema.js");
 
 module.exports.getSentRequests = async (req, res) => {
     try {
+        console.log("Sent requests");
         // const user = await User.findOne({userID: req.user.userID});
         // const allRequests= await Request.find({requestedBy: req.user.club});
         const allRequests = await Request.find({ requestedBy: req.query.user });
@@ -42,8 +43,9 @@ module.exports.acceptRequest = async (req, res) => {
         // newTime = {Start : "2016-05-18T16:00:00Z", End: "2016-05-18T16:00:00Z"}  //Example
         const item = await Item.findOneAndUpdate(
             { _id: targetRequest.itemId },
-            { "status": "bcd", $push: { "occupiedTime": newTime } }
+            { $push: { "occupiedTime": newTime } }
         );
+        setTimeout(clearRequestTime, newTime.Start-Date.now(), {"id": targetRequest.itemId, "Start": targetRequest.inTime, "End": targetRequest.outTime});
         res.json({
             item: item,
             req: targetRequest
@@ -99,6 +101,14 @@ module.exports.deleteRequest = async (req, res) => {
     }
     catch {
         res.send(err);
+        console.log(err);
+    }
+}
+const clearRequestTime= async(arg)=>{
+    try{
+        const item = await Item.findOneAndUpdate({_id: arg.id},{"$pull": {"occupiedTime": { "Start":  arg.startTime , "End" : arg.endTime}  }});
+    }
+    catch(err){
         console.log(err);
     }
 }
