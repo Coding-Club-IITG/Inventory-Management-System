@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import EnhancedTable from '../components/EnhancedTable';
-import Filter from '../components/filter/Filter.jsx'
+import Filter from '../components/filter/filter.jsx'
 import axios from 'axios';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
@@ -108,7 +108,7 @@ const Home = (props) => {
             </Snackbar>
             <Navbar data={data} setData={setData} onQuery={setQuery} />
             <div className='min-h-screen flex flex-row gap-4 p-4'>
-                <Filter setStartDate={setStartDate} setEndDate={setEndDate} clubName={clubName} setClubName={setClubName} catName={catName} setCatName={setCatName}></Filter>
+                <Filter data = {data} setStartDate={setStartDate} setEndDate={setEndDate} clubName={clubName} setClubName={setClubName} catName={catName} setCatName={setCatName}></Filter>
                 <EnhancedTable data={data} setData={setData} user={user} query={query} clubName={clubName} catName={catName} startDate={startDate} endDate={endDate}></EnhancedTable>
             </div>
         </div>

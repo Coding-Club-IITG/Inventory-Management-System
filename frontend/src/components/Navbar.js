@@ -85,53 +85,63 @@ function Navbar(props) {
 
   const handleSubmit = async () => {
     const lastItem = {
-      itemName: itemName,
-      category: category,
-      quantity: quantity,
-    }
-    const itemArr = [...formValues, lastItem];
-    const options = {
-      "itemArr": itemArr,
-      // "name": itemName,
-      // "category": category,
+      "name": itemName,
+      "category": category,
+      "quantity": quantity,
       "ownedBy": ownedBy,
-      // "quantity": quantity,
       "purchasedOn": purchaseDate.toDate().getTime(),
+      "status": "Available",
+      "remarks": remarks,
+    }
+    const newArr = formValues.map(item => {
+      return (
+        {
+          "name": item.itemName,
+          "category": item.category,
+          "quantity": item.quantity,
+          "ownedBy": ownedBy,
+          "purchasedOn": purchaseDate.toDate().getTime(),
+          "status": "Available",
+          "remarks": remarks,
+        }
+      )
+    });
+    const itemArr = [...newArr, lastItem];
+    const options = {
+      "itemsList": itemArr,
       "bill": bill,
       "sanctionLetter": sanctionLetter,
       "purchaseOrder": purchaseOrder,
       "inspectionReport": inspectionReport,
-      "status": "Available",
-      "remarks": remarks,
-      "occupiedTime": []
+      "pageNo": pageNo,
+      "serialNo": serialNo,
+      "registerNo": registerNo,
+      "bookings": []
     };
     console.log(options);
     try {
-      alert("Backend not updated yet");
-      // axios.post("http://localhost:8080/item", options, {
-      //   headers: {
-      //     "Content-Type": "multipart/form-data",
-      //   },
-      // }).then((res) => {
-      //   console.log(res.data);
-      //   const newItem = res.data.item;
-      //   const newData = [...data, newItem];
-      //   setData(newData);
-      //   handleCloseAddModal();
-      //   handleClickSuccessMsg();
-      //   // alert('Item added successfully');
-      // }).catch((e) => {
-      //   handleCloseAddModal();
-      //   handleClickErrorMsg();
-      //   // alert('Unable to add item. Please try again later');
+      // alert("Backend not updated yet");
+      axios.post("http://localhost:8080/item", options, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }).then((res) => {
+        handleCloseAddModal();
+        handleClickSuccessMsg();
+        // alert('Item added successfully');
+      }).catch((e) => {
+        handleCloseAddModal();
+        handleClickErrorMsg();
+        // alert('Unable to add item. Please try again later');
 
-      // });
+      });
     }
     catch (e) {
       handleCloseAddModal();
       handleClickErrorMsg();
       // alert('Unable to add item. Please try again later');
     }
+
   }
 
   const onChangeHandler = (e, index) => {

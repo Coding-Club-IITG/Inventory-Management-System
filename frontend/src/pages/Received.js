@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Navbar from '../components/Navbar';
-import Filter from '../components/filter/Filter.jsx'
+import Filter from '../components/filter/filter.jsx'
 import RequestReceived from '../components/RequestReceived';
 import axios from 'axios';
 import Snackbar from '@mui/material/Snackbar';
@@ -12,7 +12,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 const Received = (props) => {
     const { setUser } = props;
-    const {startDate, setStartDate, endDate, setEndDate, clubName, setClubName, catName, setCatName}=props;
+    const { setStartDate, setEndDate, clubName, setClubName, catName, setCatName } = props;
     const [data, setData] = useState([]);
     const [openNetworkErrorMsg, setOpenNetworkErrorMsg] = useState(false);
     const [openErrorMsg, setOpenErrorMsg] = useState(false);
@@ -45,7 +45,6 @@ const Received = (props) => {
             const options = { "user": club };
             const resp = await axios.get("http://localhost:8080/request/received", { params: options });
             setData(resp.data);
-            console.log(resp.data);
         }
         catch (e) {
             // console.log("Received.js - Network error in fetchData");
@@ -103,7 +102,7 @@ const Received = (props) => {
             </Snackbar>
             <Navbar textContent={"Requests - Received"} />
             <div className='min-h-screen flex flex-row gap-4 p-4'>
-            <Filter setStartDate={setStartDate} setEndDate={setEndDate} clubName={clubName} setClubName={setClubName} catName={catName} setCatName={setCatName}></Filter>
+                <Filter setStartDate={setStartDate} setEndDate={setEndDate} clubName={clubName} setClubName={setClubName} catName={catName} setCatName={setCatName}></Filter>
                 <RequestReceived data={data} setData={setData}></RequestReceived>
             </div>
         </div>

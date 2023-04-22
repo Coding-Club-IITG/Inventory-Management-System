@@ -185,6 +185,19 @@ function Row(props) {
     const [openRejectMsg, setOpenRejectMsg] = useState(false);
     const [openErrorMsg, setOpenErrorMsg] = useState(false);
     const [openNetworkErrorMsg, setOpenNetworkErrorMsg] = useState(false);
+    const [openRemoveMsg, setOpenRemoveMsg] = useState(false);
+
+    const handleClickRemoveMsg = () => {
+        setOpenRemoveMsg(true);
+    };
+
+    const handleCloseRemoveMsg = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpenRemoveMsg(false);
+    };
 
     const handleClickAcceptMsg = () => {
         setOpenAcceptMsg(true);
@@ -300,6 +313,35 @@ function Row(props) {
         }
     }
 
+    const handleRemoveRequest = (id) => {
+        if (window.confirm("Are you sure want to delete this request") === true) {
+            try {
+                axios.delete("http://localhost:8080/request/delete", {
+                    headers: {
+                        Authorization: "usertoken"
+                    },
+                    data: {
+                        "ID": id
+                    }
+                })
+                    .then((res) => {
+                        const newData = data.filter(el => el._id !== id);
+                        setData(newData);
+                        handleClickRemoveMsg();
+                    }).catch((e) => {
+                        handleCloseErrorMsg();
+                        // alert('Unable to delete item. Please try again later');
+                    });
+            }
+            catch (e) {
+                handleClickNetworkErrorMsg();
+            }
+            setOpen(false);
+        } else {
+            console.log("Remove request cancelled");
+        }
+    }
+
     const formatDuration = (data) => {
         const numberOfHours = Math.ceil(data / (3600 * 1000));
         let Days = Math.floor(numberOfHours / 24);
@@ -357,9 +399,14 @@ function Row(props) {
                             Request Rejected!
                         </Alert>
                     </Snackbar>
+                    <Snackbar open={openRemoveMsg} autoHideDuration={6000} onClose={handleCloseRemoveMsg} anchorOrigin={{ vertical, horizontal }}>
+                        <Alert onClose={handleCloseRemoveMsg} severity="success" sx={{ width: '100%' }}>
+                            Request updated successfully!
+                        </Alert>
+                    </Snackbar>
                     <Snackbar open={openErrorMsg} autoHideDuration={6000} onClose={handleCloseErrorMsg} anchorOrigin={{ vertical, horizontal }}>
                         <Alert onClose={handleCloseErrorMsg} severity="error" sx={{ width: '100%' }}>
-                            Unable to delete request. Please try again later!
+                            Unable to process request. Please try again later!
                         </Alert>
                     </Snackbar>
                     <Snackbar open={openNetworkErrorMsg} autoHideDuration={6000} onClose={handleCloseNetworkErrorMsg} anchorOrigin={{ vertical, horizontal }}>
@@ -398,7 +445,7 @@ function Row(props) {
                                             :
                                             (row.requestStatus === 'Approved' ?
                                                 (<React.Fragment>
-                                                    <button type="submit" className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">Item Returned</button>
+                                                    <button type="submit" className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" onClick={() => handleRemoveRequest(row._id)}>Item Returned</button>
                                                     <button type="submit" className="bg-transparent hover:bg-red-500 text-red-700 ml-6 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded">Force Decline</button>
                                                 </React.Fragment>) :
                                                 "")}

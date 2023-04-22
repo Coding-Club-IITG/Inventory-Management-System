@@ -3,6 +3,7 @@ import CategorySelect from './category_dropdown';
 import DayTime from './day_time';
 import styled from "styled-components";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {CSVLink} from "react-csv";
 
 
 const theme = createTheme({
@@ -54,7 +55,34 @@ const Wrap = styled.div`
 `;
 
 function Filter(props) {
-  const { setStartDate, setEndDate, clubName, setClubName, catName, setCatName } = props;
+  const { data, setStartDate, setEndDate, clubName, setClubName, catName, setCatName } = props;
+
+  console.log(data);
+  const headers = [
+
+    {label : 'bill', key : 'bill'},
+    {label : 'category', key : 'category'},
+    {label : 'heldBy', key : 'heldBy'},
+    {label : 'name', key : 'name'},
+    {label : 'occupiedTime', key : 'occupiedTime'},
+    {label : 'ownedBy', key : 'ownedBy'},
+    {label : 'quantity', key : 'quantity'},
+    {label : 'remarks', key : 'remarks'},
+    {label : 'sanctionLetter', key : 'sanctionLetter'},
+    {label : 'status', key : 'status'},
+    {label : '__v', key : '__v'},
+    {label : '_id', key : '_id'},
+  
+  ];
+  
+  const csvReport = {
+  
+    filename: "item-data.csv",
+    headers : headers,
+    data : data
+  };
+
+
   return (
     <Wrap>
       <FilterHead>Filters</FilterHead>
@@ -63,6 +91,7 @@ function Filter(props) {
           <ClubSelect setClubName={setClubName} clubName={clubName} />
           <CategorySelect catName={catName} setCatName={setCatName} />
           <DayTime setStartDate={setStartDate} setEndDate={setEndDate} />
+          <CSVLink {...csvReport}> Click to download CSV </CSVLink>
         </FilterContent>
       </ThemeProvider>
     </Wrap>
