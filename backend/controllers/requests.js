@@ -35,13 +35,8 @@ module.exports.acceptRequest = async (req, res) => {
             { requestStatus: `Approved` }
         );
         const item = await Item.findOneAndUpdate(
-<<<<<<< HEAD
-            { _id: targetRequest.itemId },
-            { $push: { "occupiedTime": newTime } }
-=======
             { _id: targetRequest?.itemId },
             { "status": "bcd", $push: { "bookings": targetRequest } }
->>>>>>> cd0be18b0a971cb13b9072311234807b40abafca
         );
         setTimeout(clearRequestTime, newTime.Start-Date.now(), {"id": targetRequest.itemId, "Start": targetRequest.inTime, "End": targetRequest.outTime});
         res.json({
