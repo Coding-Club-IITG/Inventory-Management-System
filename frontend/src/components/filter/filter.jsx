@@ -79,7 +79,8 @@ function Filter(props) {
   
     filename: "item-data.csv",
     headers : headers,
-    data : data
+    data : (data ? data : [])
+    
   };
 
 
