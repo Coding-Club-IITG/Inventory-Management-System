@@ -3,6 +3,7 @@ const Item = require("../models/itemSchema");
 const moment = require("moment");
 
 const itemsCronJob = () => {
+  // Choose default cron jobs for 1 minutes
   cron.schedule("* * * * *", async () => {
     const currentTimestamp = moment().valueOf();
     try {
