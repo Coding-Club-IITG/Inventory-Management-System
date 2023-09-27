@@ -87,7 +87,10 @@ module.exports.addItem = async (req, res) => {
   let inspectionURL = "";
   let savedItemDocument = {};
   const timestamp = Date.now();
+
+  // Upload bill to firebase
   if (req.files["bill"]) {
+    // Give unique name to bill with bill+timestamp to save in database
     const fileNameBill = `${req.files["bill"][0].originalname.split(".")[0]
       }_${timestamp}.${req.files["bill"][0].originalname.split(".")[1]}`;
     const billRef = ref(storage, fileNameBill);
@@ -106,7 +109,11 @@ module.exports.addItem = async (req, res) => {
       console.log(err);
     }
   }
+
+  // Upload sanctionLetter to firebase
   if (req.files["sanctionLetter"]) {
+    
+    // Give unique name to sanctionLetter+timestamp to save in database
     const fileNameSanctionLetter = `${req.files["sanctionLetter"][0].originalname.split(".")[0]
       }_${timestamp}.${req.files["sanctionLetter"][0].originalname.split(".")[1]
       }`;
@@ -127,28 +134,31 @@ module.exports.addItem = async (req, res) => {
     }
   }
 
-  //   if (req.files["purchaseOrder"]) {
-  //     const fileNamePurchaseOrder = `${
-  //       req.files["purchaseOrder"][0].originalname.split(".")[0]
-  //     }_${timestamp}.${req.files["purchaseOrder"][0].originalname.split(".")[1]}`;
-  //     const purchaseOrderRef = ref(storage, fileNamePurchaseOrder);
+    if (req.files["purchaseOrder"]) {
+      // Give unique name to purchasedOrder+timestamp to save in database
+      const fileNamePurchaseOrder = `${
+        req.files["purchaseOrder"][0].originalname.split(".")[0]
+      }_${timestamp}.${req.files["purchaseOrder"][0].originalname.split(".")[1]}`;
+      const purchaseOrderRef = ref(storage, fileNamePurchaseOrder);
 
-  //     try {
-  //       const purchaseOrderSnapshot = await uploadBytesResumable(
-  //         purchaseOrderRef,
-  //         req.files["purchaseOrder"][0].buffer,
-  //         {
-  //           contentType: req.files["purchaseOrder"][0]?.mimetype,
-  //         }
-  //       );
-  //       purchaseURL = await getDownloadURL(purchaseOrderSnapshot.ref);
-  //     } catch (err) {
-  //       res.status(500).send(err);
-  //       console.log(err);
-  //     }
-  //   }
+      try {
+        const purchaseOrderSnapshot = await uploadBytesResumable(
+          purchaseOrderRef,
+          req.files["purchaseOrder"][0].buffer,
+          {
+            contentType: req.files["purchaseOrder"][0]?.mimetype,
+          }
+        );
+        purchaseURL = await getDownloadURL(purchaseOrderSnapshot.ref);
+      } catch (err) {
+        res.status(500).send(err);
+        console.log(err);
+      }
+    }
 
   if (req.files["inspectionReport"]) {
+    
+    // Give unique name to inspectionReport+timestamp to save in database
     const fileNameInspectionReport = `${req.files["inspectionReport"][0].originalname.split(".")[0]
       }_${timestamp}.${req.files["inspectionReport"][0].originalname.split(".")[1]
       }`;
@@ -168,11 +178,12 @@ module.exports.addItem = async (req, res) => {
     }
   }
 
-  /// save the documents
+  // save the documents
   const itemDocument = new ItemDocument({
     bill: _.isEmpty(billURL) ? "" : billURL,
     sanctionLetter: _.isEmpty(sanctionURL) ? "" : sanctionURL,
     inspectionReport: _.isEmpty(inspectionURL) ? "" : inspectionURL,
+    purchaseOrder: _.isEmpty(purchaseURL) ? "" : purchaseURL,
   });
   try {
     savedItemDocument = await itemDocument.save();
@@ -192,10 +203,10 @@ module.exports.addItem = async (req, res) => {
       heldBy: data.heldBy ? data.heldBy : data.ownedBy,
       quantity: data.quantity,
       purchasedOn: data.purchasedOn,
-      bill: billURL,
-      sanctionLetter: sanctionURL,
-      purchaseOrder: purchaseURL,
-      inspectionReport: inspectionURL,
+      // bill: billURL,
+      // sanctionLetter: sanctionURL,
+      // purchaseOrder: purchaseURL,
+      // inspectionReport: inspectionURL,
       itemDocument: new mongoose.Types.ObjectId(savedItemDocument._id), // Assigning an ObjectId to itemDocument field
       status: data.status,
       remarks: data.remarks,
@@ -303,11 +314,15 @@ module.exports.editDocument = async (req, res) => {
 
 module.exports.returnItem = async (req, res) => {
   try {
+
+    //Update status to available, and held by back to original 
     const updatedItem = await Item.findOneAndUpdate(
       { _id: req.body.itemId },
       { heldBy: req.body.heldBy, status: "available" }
     );
     if (!updatedItem) res.status(404).send({ result: "Item Not Found" });
+
+
     // Remove the first request from the bookings array
     updatedItem.bookings.shift();
     await updatedItem.save();
