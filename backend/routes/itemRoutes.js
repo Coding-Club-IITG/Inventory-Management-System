@@ -21,14 +21,14 @@ const upload = multer({ storage: multer.memoryStorage() });
 const filesUploader = upload.fields([{ name: 'bill', maxCount: 1 }, { name: 'sanctionLetter', maxCount: 1 }, { name: 'purchaseOrder', maxCount: 1 }, { name: 'inspectionReport', maxCount: 1 }])
 const singleFileUploader = upload.single("image");
 itemRouter.route("/")
-    .post(filesUploader, addItem)
-    .get(listAllItems)
-    .delete(deleteItem);
-itemRouter.put("/return", returnItem);
+    .post(authenticateToken, filesUploader, addItem)
+    .get(authenticateToken, listAllItems)
+    .delete(authenticateToken, deleteItem);
+itemRouter.put("/return", authenticateToken, returnItem);
 itemRouter.get("/download", authenticateToken, download);
-itemRouter.put("/:id",editItem)
+itemRouter.put("/:id", authenticateToken, editItem)
 // itemRouter.put("/document/:documentId",editDocument)
-itemRouter.put('/:documentId/:documentType',upload.single("file"),editDocument)
-itemRouter.post("/upload", upload.single("image"),uploadImage)
+itemRouter.put('/:documentId/:documentType', authenticateToken, upload.single("file"), editDocument)
+itemRouter.post("/upload", authenticateToken, upload.single("image"), uploadImage)
 module.exports = itemRouter;
 
