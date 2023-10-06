@@ -257,7 +257,8 @@ function Row(props) {
         if (window.confirm("Are you sure want to approve this request") === true) {
             try {
                 const options = { "requestId": id }
-                axios.put("http://localhost:8080/request/accept", options)
+                const token = JSON.parse(localStorage.getItem('rim-jwt'));
+                axios.put("http://localhost:8080/request/accept", options, {headers : { Authorization : `Bearer ${token}`}})
                     .then((res) => {
                         // console.log(res.data);
                         const newData = data.map(el => {
@@ -287,7 +288,8 @@ function Row(props) {
         if (window.confirm("Are you sure want to decline this request") === true) {
             try {
                 const options = { "requestId": id }
-                axios.put("http://localhost:8080/request/reject", options)
+                const token = JSON.parse(localStorage.getItem('rim-jwt'));
+                axios.put("http://localhost:8080/request/reject", options, { headers : { Authorization : `Bearer ${token}` } })
                     .then((res) => {
                         // console.log(res.data);
                         const newData = data.map(el => {
@@ -313,12 +315,75 @@ function Row(props) {
         }
     }
 
+
+    const handleReturnRequest = (id) => {
+        if (window.confirm("Please confirm that this item was returned") === true) {
+            try {
+                const token = JSON.parse(localStorage.getItem('rim-jwt'));
+                axios.delete("http://localhost:8080/request/delete", {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    },
+                    data: {
+                        "ID": id
+                    }
+                })
+                    .then((res) => {
+                        const newData = data.filter(el => el._id !== id);
+                        setData(newData);
+                        handleClickRemoveMsg();
+                    }).catch((e) => {
+                        handleCloseErrorMsg();
+                        // alert('Unable to delete item. Please try again later');
+                    });
+            }
+            catch (e) {
+                handleClickNetworkErrorMsg();
+            }
+            setOpen(false);
+        } else {
+            console.log("Remove request cancelled");
+        }
+    }
+
+    const handleForceDeclineRequest = (id) => {
+        if (window.confirm("Are you sure you want to decline this request") === true) {
+            try {
+                const token = JSON.parse(localStorage.getItem('rim-jwt'));
+                axios.delete("http://localhost:8080/request/delete", {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    },
+                    data: {
+                        "ID": id
+                    }
+                })
+                    .then((res) => {
+                        const newData = data.filter(el => el._id !== id);
+                        setData(newData);
+                        handleClickRemoveMsg();
+                    }).catch((e) => {
+                        handleCloseErrorMsg();
+                        // alert('Unable to delete item. Please try again later');
+                    });
+            }
+            catch (e) {
+                handleClickNetworkErrorMsg();
+            }
+            setOpen(false);
+        } else {
+            console.log("Remove request cancelled");
+        }
+    }
+
+
     const handleRemoveRequest = (id) => {
         if (window.confirm("Are you sure want to delete this request") === true) {
             try {
+                const token = JSON.parse(localStorage.getItem('rim-jwt'));
                 axios.delete("http://localhost:8080/request/delete", {
                     headers: {
-                        Authorization: "usertoken"
+                        Authorization: `Bearer ${token}`
                     },
                     data: {
                         "ID": id
@@ -445,8 +510,8 @@ function Row(props) {
                                             :
                                             (row.requestStatus === 'Approved' ?
                                                 (<React.Fragment>
-                                                    <button type="submit" className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" onClick={() => handleRemoveRequest(row._id)}>Item Returned</button>
-                                                    <button type="submit" className="bg-transparent hover:bg-red-500 text-red-700 ml-6 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded">Force Decline</button>
+                                                    <button type="submit" className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" onClick={() => handleReturnRequest(row._id)}>Item Returned</button>
+                                                    <button type="submit" className="bg-transparent hover:bg-red-500 text-red-700 ml-6 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded" onClick={() => handleForceDeclineRequest(row._id)}>Force Decline</button>
                                                 </React.Fragment>) :
                                                 "")}
                                     </div>
