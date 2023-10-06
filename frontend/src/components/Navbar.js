@@ -121,9 +121,11 @@ function Navbar(props) {
     console.log(options);
     try {
       // alert("Backend not updated yet");
+      const token = JSON.parse(localStorage.getItem('rim-jwt'));
       axios.post("http://localhost:8080/item", options, {
         headers: {
           "Content-Type": "multipart/form-data",
+          "Authorization": `Bearer ${token}`
         },
       }).then((res) => {
         handleCloseAddModal();

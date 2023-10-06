@@ -40,10 +40,10 @@ const Received = (props) => {
 
         setOpenNetworkErrorMsg(false);
     };
-    const fetchData = async (club) => {
+    const fetchData = async (club, token) => {
         try {
             const options = { "user": club };
-            const resp = await axios.get("http://localhost:8080/request/received", { params: options });
+            const resp = await axios.get("http://localhost:8080/request/received", { params: options, headers: {"Authorization" : `Bearer ${token}`} });
             setData(resp.data);
         }
         catch (e) {
@@ -57,7 +57,7 @@ const Received = (props) => {
             const credentials = { jwt: token };
             const resp = await axios.post("http://localhost:4000/checkToken", credentials);
             setUser(resp.data.user);
-            fetchData(resp.data.user.club);
+            fetchData(resp.data.user.club, token);
         }
         catch (e) {
             if (e.response.status === 401) {

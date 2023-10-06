@@ -227,9 +227,10 @@ function Row(props) {
     const handleRemoveRequest = (id) => {
         if (window.confirm("Are you sure want to delete this request") === true) {
             try {
+                const token = JSON.parse(localStorage.getItem('rim-jwt'));
                 axios.delete("http://localhost:8080/request/delete", {
                     headers: {
-                        Authorization: "usertoken"
+                        Authorization: `Bearer ${token}`,
                     },
                     data: {
                         "ID": id

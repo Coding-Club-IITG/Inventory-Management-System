@@ -424,16 +424,16 @@ function Row(props) {
     };
 
     const handleRemoveItem = (id) => {
+
         if (window.confirm("Are you sure want to remove this item") === true) {
             // console.log("API call to remove item");
+            const token = JSON.parse(localStorage.getItem('rim-jwt'));
             try {
                 // const options = { "ID": id };
                 // console.log(options);
 
                 axios.delete("http://localhost:8080/item", {
-                    headers: {
-                        Authorization: "usertoken"
-                    },
+                    headers: {Authorization : `Bearer ${token}`},
                     data: {
                         "ID": id
                     }
@@ -498,10 +498,12 @@ function Row(props) {
             );
 
         try {
+            const token = JSON.parse(localStorage.getItem('rim-jwt'));
             axios.all([
                 axios.put(`http://localhost:8080/item/${id}`, options, {
                     headers: {
                         "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}` 
                     },
                 }),
                 arr.map(el => {
@@ -511,6 +513,7 @@ function Row(props) {
                         }, {
                             headers: {
                                 "Content-Type": "multipart/form-data",
+                                "Authorization": `Bearer ${token}` 
                             },
                         })
                     )
@@ -579,8 +582,10 @@ function Row(props) {
             "remarks": remarks
         };
         console.log(options);
+
         try {
-            axios.post("http://localhost:8080/request", options).then((res) => {
+            const token = JSON.parse(localStorage.getItem('rim-jwt'));
+            axios.post("http://localhost:8080/request", options, { headers : {"Authorization" : `Bearer ${token}`}}).then((res) => {
                 handleCloseRequest();
                 handleClickRequestSuccessMsg();
             }).catch((e) => {

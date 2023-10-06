@@ -44,15 +44,25 @@ const Home = (props) => {
     };
 
     const navigate = useNavigate();
-    const fetchData = async () => {
+    const fetchData = async (club, token) => {
         try {
-            const fetchResponse = await fetch(`http://localhost:8080/item`);
-            const data = await fetchResponse.json();
-            setData(data);
-            // console.log(data);
+            // const credentials = { jwt: token };
+            const data = await axios.get(`http://localhost:8080/item`, { headers: {"Authorization" : `Bearer ${token}`} });
+            // const data = await fetchResponse.json();
+            console.log(data.data);
+            setData(data.data);
         }
         catch (e) {
-            handleClickNetworkErrorMsg();
+            if (e.response.status === 401) {
+                handleClickErrorMsg();
+                setTimeout(() => {
+                    navigate('/login');
+                }, 2000);
+            }
+            else {
+                // console.log("Sent.js - Network error in validate token");
+                handleClickNetworkErrorMsg();
+            }
             // alert("Internal server error. Please try again later");
         }
     }
@@ -62,9 +72,10 @@ const Home = (props) => {
             const credentials = { jwt: token };
             const resp = await axios.post("http://localhost:4000/checkToken", credentials);
             setUser(resp.data.user);
-            fetchData(resp.data.user.club);
+            fetchData(resp.data.user.club, token);
         }
         catch (e) {
+            console.log(e.response);
             if (e.response.status === 401) {
                 handleClickErrorMsg();
                 setTimeout(() => {
