@@ -6,6 +6,7 @@ import axios from 'axios';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -87,6 +88,8 @@ const Received = (props) => {
 
         //eslint-disable-next-line
     }, []);
+
+    console.log(dayjs(startDate).$d);
 
     const vertical = 'top'
     const horizontal = 'center';

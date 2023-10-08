@@ -6,11 +6,13 @@ import axios from 'axios';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 const Sent = (props) => {
+
     const [data, setData] = useState([]);
     const { user, setUser } = props;
     const [openErrorMsg, setOpenErrorMsg] = useState(false);
@@ -96,8 +98,6 @@ const Sent = (props) => {
 
         //eslint-disable-next-line
     }, []);
-
-    console.log(props);
 
     const vertical = 'top'
     const horizontal = 'center';

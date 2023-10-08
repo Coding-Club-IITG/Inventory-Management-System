@@ -581,7 +581,6 @@ export default function RequestReceived(props) {
         if (typeof (startDate) === 'number' && typeof (endDate) === 'number') {
             
             results = results.filter((item) => {
-                console.log(item);
                 if (startDate <= item.requestTime && item.requestTime <= endDate) {
                     return true;
                 } else {

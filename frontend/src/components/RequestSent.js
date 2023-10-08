@@ -17,6 +17,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { styled } from '@mui/material/styles';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
+import dayjs from 'dayjs';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 
@@ -329,7 +330,7 @@ function Row(props) {
 }
 
 export default function RequestSent(props) {
-    const { data, setData, user } = props;
+    const { data, setData } = props;
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('name');
 
@@ -346,16 +347,11 @@ export default function RequestSent(props) {
     const endDate = props.endDate;
 
     const searchFunc = (query, clubName, catName, startDate = 0, endDate = Date.now()) => {
-
-        console.log(query);
-        
         var results = data.filter((item) => {
             if (item.name)
                 return item.name.toLowerCase().includes(query.toLowerCase());
             return false;
         });
-
-        console.log(results);
 
         if (typeof clubName === "object" && clubName.length !== 0) {
             results = results.filter((item) => {
@@ -391,7 +387,6 @@ export default function RequestSent(props) {
         if (typeof (startDate) === 'number' && typeof (endDate) === 'number') {
             
             results = results.filter((item) => {
-                console.log(item);
                 if (startDate <= item.requestTime && item.requestTime <= endDate) {
                     return true;
                 } else {
@@ -400,7 +395,6 @@ export default function RequestSent(props) {
             });
         }
 
-        console.log(results);
         return results;
 
     };
@@ -409,9 +403,6 @@ export default function RequestSent(props) {
     if (data.length !== 0) {
         searchResults = searchFunc(query, clubName, catName, startDate, endDate);
     }
-
-    console.log(data);
-    console.log(searchResults);
 
     return (
         <ThemeProvider theme={theme}>
@@ -432,7 +423,7 @@ export default function RequestSent(props) {
                             <TableBody>
                                 {stableSort(searchResults, getComparator(order, orderBy))
                                     .map((row, index) =>
-                                        <Row key={index} row={row} index={index} data={searchResults} setData={setData} user = {user}/>
+                                        <Row key={index} row={row} index={index} data={searchResults} setData={setData}/>
                                     )}
                             </TableBody>
                         </Table>

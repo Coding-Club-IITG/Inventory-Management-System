@@ -19,7 +19,7 @@ function App() {
         <Route path="/" element={<Home user={user} setUser={setUser} startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} clubName={clubName} setClubName={setClubName} catName={catName} setCatName={setCatName} />} />
         <Route path="/login" element={<Login setUser={setUser} />} />
         <Route path="/received" element={<Received setUser={setUser} startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} clubName={clubName} setClubName={setClubName} catName={catName} setCatName={setCatName} />} />
-        <Route path="/sent" element={<Sent setUser={setUser} setStartDate={setStartDate} setEndDate={setEndDate} clubName={clubName} setClubName={setClubName} catName={catName} setCatName={setCatName} />} />
+        <Route path="/sent" element={<Sent setUser={setUser} startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} clubName={clubName} setClubName={setClubName} catName={catName} setCatName={setCatName} />} />
       </Routes>
     </BrowserRouter>
   );
