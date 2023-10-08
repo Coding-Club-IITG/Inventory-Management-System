@@ -56,8 +56,6 @@ const Wrap = styled.div`
 
 function Filter(props) {
   const { data, setStartDate, setEndDate, clubName, setClubName, catName, setCatName } = props;
-
-  console.log(data);
   const headers = [
 
     {label : 'bill', key : 'bill'},

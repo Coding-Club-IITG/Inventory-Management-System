@@ -80,7 +80,9 @@ function Navbar(props) {
   };
 
   function filter(e) {
+    console.log(props);
     props.onQuery(e.target.value);
+    // return e.target.value;
   }
 
   const handleSubmit = async () => {
