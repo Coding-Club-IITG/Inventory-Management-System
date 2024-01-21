@@ -17,6 +17,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { styled } from '@mui/material/styles';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
+import dayjs from 'dayjs';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 
@@ -339,6 +340,70 @@ export default function RequestSent(props) {
         setOrderBy(property);
     };
 
+    const query = props.query;
+    const clubName = props.clubName;
+    const catName = props.catName;
+    const startDate = props.startDate;
+    const endDate = props.endDate;
+
+    const searchFunc = (query, clubName, catName, startDate = 0, endDate = Date.now()) => {
+        var results = data.filter((item) => {
+            if (item.name)
+                return item.name.toLowerCase().includes(query.toLowerCase());
+            return false;
+        });
+
+        if (typeof clubName === "object" && clubName.length !== 0) {
+            results = results.filter((item) => {
+                if (typeof (item.ownedBy) === "string" && typeof (item.heldBy) === "string") {
+                    for (let j = 0; j < clubName.length; j++) {
+                        const element = clubName[j].toLowerCase();
+                        if ((item.ownedBy.toLowerCase() === element) || (item.heldBy.toLowerCase() === element)) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            });
+        }
+
+
+        if (typeof catName === "object" && catName.length !== 0) {
+
+            results = results.filter((item) => {
+                if (typeof (item.category) === "string") {
+                    for (let j = 0; j < catName.length; j++) {
+                        const element = catName[j].toLowerCase();
+                        if (item.category.toLowerCase() === element) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            });
+        }
+
+        
+        if (typeof (startDate) === 'number' && typeof (endDate) === 'number') {
+            
+            results = results.filter((item) => {
+                if (startDate <= item.requestTime && item.requestTime <= endDate) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+        }
+
+        return results;
+
+    };
+
+    let searchResults = [];
+    if (data.length !== 0) {
+        searchResults = searchFunc(query, clubName, catName, startDate, endDate);
+    }
+
     return (
         <ThemeProvider theme={theme}>
             <Box sx={{ width: '100%' }}>
@@ -353,18 +418,18 @@ export default function RequestSent(props) {
                                 order={order}
                                 orderBy={orderBy}
                                 onRequestSort={handleRequestSort}
-                                rowCount={data.length}
+                                rowCount={searchResults.length}
                             />
                             <TableBody>
-                                {stableSort(data, getComparator(order, orderBy))
+                                {stableSort(searchResults, getComparator(order, orderBy))
                                     .map((row, index) =>
-                                        <Row key={index} row={row} index={index} data={data} setData={setData} />
+                                        <Row key={index} row={row} index={index} data={searchResults} setData={setData}/>
                                     )}
                             </TableBody>
                         </Table>
                     </TableContainer>
                 </Paper>
-                {data.length === 0 ?
+                {searchResults.length === 0 ?
                     <>
                         <p className='text-white/80 text-2xl text-center font-medium'> No records to display</p>
                     </>

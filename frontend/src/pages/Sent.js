@@ -6,16 +6,20 @@ import axios from 'axios';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 const Sent = (props) => {
-    const { setUser } = props;
-    const { setStartDate, setEndDate, clubName, setClubName, catName, setCatName } = props;
+
     const [data, setData] = useState([]);
-    const [openNetworkErrorMsg, setOpenNetworkErrorMsg] = useState(false);
+    const { user, setUser } = props;
     const [openErrorMsg, setOpenErrorMsg] = useState(false);
+    const [openNetworkErrorMsg, setOpenNetworkErrorMsg] = useState(false);
+    const [query, setQuery] = useState("");
+    const {startDate, setStartDate, endDate, setEndDate, clubName, setClubName, catName, setCatName}=props;
+
     const navigate = useNavigate();
     const handleClickErrorMsg = () => {
         setOpenErrorMsg(true);
@@ -109,10 +113,10 @@ const Sent = (props) => {
                     Network error. Please try again later!
                 </Alert>
             </Snackbar>
-            <Navbar textContent={"Requests - Sent"} />
+            <Navbar data={data} setData={setData} onQuery={setQuery}/>
             <div className='min-h-screen flex flex-row gap-4 p-4'>
-                <Filter setStartDate={setStartDate} setEndDate={setEndDate} clubName={clubName} setClubName={setClubName} catName={catName} setCatName={setCatName}></Filter>
-                <RequestSent data={data} setData={setData}></RequestSent>
+                <Filter data = {data} setStartDate={setStartDate} setEndDate={setEndDate} clubName={clubName} setClubName={setClubName} catName={catName} setCatName={setCatName}></Filter>
+                <RequestSent data={data} setData={setData} user={user} query={query} clubName={clubName} catName={catName} startDate={startDate} endDate={endDate}></RequestSent>
             </div>
         </div>
     )
