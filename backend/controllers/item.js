@@ -237,7 +237,9 @@ module.exports.addItem = async (req, res) => {
 
 module.exports.listAllItems = async (req, res) => {
   try {
+    // Find and return all items with no filter 
     const items = await Item.find();
+    // console.log(items);
     res.status(201).json(items);
   } catch {
     res.status(500).send(err);
@@ -247,12 +249,14 @@ module.exports.listAllItems = async (req, res) => {
 
 module.exports.deleteItem = async (req, res) => {
   try {
+    // Get item ID from request body and delete item
     const id = req.body.ID;
-    // console.log("Delete item api called ", id);
     Item.findByIdAndRemove(id, (err, doc) => {
       if (!err) {
+        // Return on success
         res.status(200).send({ result: "Success" });
       } else {
+        // return error
         res.send(err);
         console.log(err);
       }
@@ -264,10 +268,11 @@ module.exports.deleteItem = async (req, res) => {
 };
 
 module.exports.editItem = async (req, res) => {
+  // Get item ID to be updated. Request body contains all updates to be done in the item in appropriate format 
   const itemId = req.params.id;
   const update = req.body;
   try {
-    // Update the item in the Item collection
+    // Update the item in the Item collection, and only update the newly set values
     const updatedItem = await Item.findByIdAndUpdate(itemId, update, {
       new: true,
     });
@@ -318,7 +323,7 @@ module.exports.returnItem = async (req, res) => {
     //Update status to available, and held by back to original 
     const updatedItem = await Item.findOneAndUpdate(
       { _id: req.body.itemId },
-      { heldBy: req.body.heldBy, status: "available" }
+      { heldBy: req.body.heldBy, status: "Available" }
     );
     if (!updatedItem) res.status(404).send({ result: "Item Not Found" });
 

@@ -35,7 +35,7 @@ module.exports.acceptRequest = async (req, res) => {
         );
         const item = await Item.findOneAndUpdate(
             { _id: targetRequest?.itemId },
-            { "status": "bcd", $push: { "bookings": targetRequest } }
+            { "status": "Booked for future use.", $push: { "bookings": targetRequest } }
         );
         res.json({
             item: item,
