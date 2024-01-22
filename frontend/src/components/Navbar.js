@@ -197,7 +197,7 @@ function Navbar(props) {
       <div className="flex items-center bg-[#032538] p-5 justify-between">
         <div className="flex gap-5 items-center text-white/70">
           <Link to="/" className="text-xl px-4 font-bold text-white">
-            RIM PORTAL
+            IMS PORTAL
           </Link>
           <Link to="/" className="hover:text-white">
             <p className={`cursor-pointer px-4 py-2 ${text ? "" : "bg-white/20"}`}>Home</p>

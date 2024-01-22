@@ -162,7 +162,7 @@ const Login = (props) => {
                 <div className='login-container h-full w-screen bg-top bg-no-repeat bg-cover' style={{ backgroundImage: `url(${background})` }} >
                     <div className='bg-[#032538] min-h-screen h-full w-full md:w-6/12 lg:w-5/12 px-12 py-14'>
                         <h1 className='text-[4.5rem] font-bold text-white max-w-md mx-auto md:mx-0'>
-                            RIM
+                            IMS
                         </h1>
                         <h1 className='text-[4.5rem] font-bold text-white max-w-md mx-auto md:mx-0'>
                             Portal
@@ -217,11 +217,11 @@ const Login = (props) => {
                                 }
                             </div>
                         </Box>
-                        <div className=' flex items-center justify-between mt-4 max-w-sm mx-auto'>
+                        {/* <div className=' flex items-center justify-between mt-4 max-w-sm mx-auto'>
                             <div className='bg-white rounded-full w-20 h-20 shadow-2xl shadow-black/60 grid place-items-center'>Logo</div>
                             <div className='bg-white rounded-full w-20 h-20 shadow-2xl shadow-black/60 grid place-items-center'>Logo</div>
                             <div className='bg-white rounded-full w-20 h-20 shadow-2xl shadow-black/60 grid place-items-center'>Logo</div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </ThemeProvider>
