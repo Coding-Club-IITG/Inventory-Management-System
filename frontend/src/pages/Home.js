@@ -13,7 +13,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 const Home = (props) => {
     const [data, setData] = useState([]);
-    const { user, setUser } = props;
+    const { user, setUser, authRoot, serverRoot } = props;
     const [openErrorMsg, setOpenErrorMsg] = useState(false);
     const [openNetworkErrorMsg, setOpenNetworkErrorMsg] = useState(false);
     const [query, setQuery] = useState("");
@@ -47,7 +47,7 @@ const Home = (props) => {
     const fetchData = async (club, token) => {
         try {
             // const credentials = { jwt: token };
-            const data = await axios.get(`http://localhost:8080/item`, { headers: {"Authorization" : `Bearer ${token}`} });
+            const data = await axios.get(serverRoot+`/item`, { headers: {"Authorization" : `Bearer ${token}`} });
             // const data = await fetchResponse.json();
             console.log(data.data);
             setData(data.data);
@@ -70,7 +70,8 @@ const Home = (props) => {
     const validateToken = async (token) => {
         try {
             const credentials = { jwt: token };
-            const resp = await axios.post("http://localhost:4000/checkToken", credentials);
+            console.log(authRoot);
+            const resp = await axios.post(authRoot+"/checkToken", credentials);
             setUser(resp.data.user);
             fetchData(resp.data.user.club, token);
         }
@@ -83,7 +84,7 @@ const Home = (props) => {
                 }, 2000);
             }
             else {
-                // console.log("Sent.js - Network error in validate token");
+                console.log("Sent.js - Network error in validate token");
                 handleClickNetworkErrorMsg();
             }
         }
@@ -117,10 +118,10 @@ const Home = (props) => {
                     Network error. Please try again later!
                 </Alert>
             </Snackbar>
-            <Navbar data={data} setData={setData} onQuery={setQuery} />
+            <Navbar data={data} setData={setData} onQuery={setQuery} serverRoot={serverRoot} />
             <div className='min-h-screen flex flex-row gap-4 p-4'>
                 <Filter data = {data} setStartDate={setStartDate} setEndDate={setEndDate} clubName={clubName} setClubName={setClubName} catName={catName} setCatName={setCatName}></Filter>
-                <EnhancedTable data={data} setData={setData} user={user} query={query} clubName={clubName} catName={catName} startDate={startDate} endDate={endDate}></EnhancedTable>
+                <EnhancedTable data={data} setData={setData} user={user} serverRoot={serverRoot} query={query} clubName={clubName} catName={catName} startDate={startDate} endDate={endDate}></EnhancedTable>
             </div>
         </div>
     )

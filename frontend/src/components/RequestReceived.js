@@ -178,7 +178,7 @@ EnhancedTableHead.propTypes = {
 };
 
 function Row(props) {
-    const { row, index, data, setData } = props;
+    const { row, index, data, setData, serverRoot } = props;
     const labelId = `enhanced-table-checkbox-${index}`;
     const [open, setOpen] = React.useState(false);
     const [openAcceptMsg, setOpenAcceptMsg] = useState(false);
@@ -258,7 +258,7 @@ function Row(props) {
             try {
                 const options = { "requestId": id }
                 const token = JSON.parse(localStorage.getItem('rim-jwt'));
-                axios.put("http://localhost:8080/request/accept", options, {headers : { Authorization : `Bearer ${token}`}})
+                axios.put(serverRoot+"/request/accept", options, {headers : { Authorization : `Bearer ${token}`}})
                     .then((res) => {
                         // console.log(res.data);
                         const newData = data.map(el => {
@@ -289,7 +289,7 @@ function Row(props) {
             try {
                 const options = { "requestId": id }
                 const token = JSON.parse(localStorage.getItem('rim-jwt'));
-                axios.put("http://localhost:8080/request/reject", options, { headers : { Authorization : `Bearer ${token}` } })
+                axios.put(serverRoot+"/request/reject", options, { headers : { Authorization : `Bearer ${token}` } })
                     .then((res) => {
                         // console.log(res.data);
                         const newData = data.map(el => {
@@ -320,7 +320,7 @@ function Row(props) {
         if (window.confirm("Please confirm that this item was returned") === true) {
             try {
                 const token = JSON.parse(localStorage.getItem('rim-jwt'));
-                axios.delete("http://localhost:8080/request/delete", {
+                axios.delete(serverRoot+"/request/delete", {
                     headers: {
                         Authorization: `Bearer ${token}`
                     },
@@ -350,7 +350,7 @@ function Row(props) {
         if (window.confirm("Are you sure you want to decline this request") === true) {
             try {
                 const token = JSON.parse(localStorage.getItem('rim-jwt'));
-                axios.delete("http://localhost:8080/request/delete", {
+                axios.delete(serverRoot+"/request/delete", {
                     headers: {
                         Authorization: `Bearer ${token}`
                     },
@@ -381,7 +381,7 @@ function Row(props) {
         if (window.confirm("Are you sure want to delete this request") === true) {
             try {
                 const token = JSON.parse(localStorage.getItem('rim-jwt'));
-                axios.delete("http://localhost:8080/request/delete", {
+                axios.delete(serverRoot+"/request/delete", {
                     headers: {
                         Authorization: `Bearer ${token}`
                     },
@@ -526,7 +526,7 @@ function Row(props) {
 }
 
 export default function RequestReceived(props) {
-    const { data, setData } = props;
+    const { data, setData, serverRoot } = props;
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
 
@@ -618,7 +618,7 @@ export default function RequestReceived(props) {
                             <TableBody>
                                 {stableSort(searchResults, getComparator(order, orderBy))
                                     .map((row, index) =>
-                                        <Row key={index} row={row} index={index} data={searchResults} setData={setData}/>
+                                        <Row key={index} row={row} index={index} data={searchResults} setData={setData} serverRoot={serverRoot} />
                                     )}
                             </TableBody>
                         </Table>

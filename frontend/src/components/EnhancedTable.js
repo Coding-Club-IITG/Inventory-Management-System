@@ -24,6 +24,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 
+// For styling the page
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: "#032538",
@@ -34,6 +35,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     },
 }));
 
+// Theme of the page
 const theme = createTheme({
     components: {
         MuiTableSortLabel: {
@@ -61,6 +63,7 @@ const theme = createTheme({
     }
 });
 
+// Comparator for sortings
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
         return -1;
@@ -93,6 +96,7 @@ function stableSort(array, comparator) {
     return stabilizedThis.map((el) => el[0]);
 }
 
+// Sample for testing
 const headCells = [
     {
         id: 'name',
@@ -126,29 +130,40 @@ const headCells = [
     },
 ];
 
+// EnhancedTableHead component definition, for the headings like ItemName, Category etc.
 function EnhancedTableHead(props) {
-    const { order, orderBy, onRequestSort } =
-        props;
+    // Destructuring props to extract values
+    const { order, orderBy, onRequestSort } = props;
+
+    // Function to create a sort handler for a specific property
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
 
+    // Render the table head
     return (
         <TableHead>
-            <TableRow >
+            {/* Table row for header cells */}
+            <TableRow>
+                {/* Map through headCells to create individual header cells */}
                 {headCells.map((headCell) => (
                     <StyledTableCell
                         key={headCell.id}
                         align={headCell.numeric ? 'center' : 'left'}
                         padding={headCell.disablePadding ? 'none' : 'normal'}
+                        // Set sort direction based on the current orderBy value
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
+                        {/* TableSortLabel for sortable columns */}
                         <TableSortLabel
                             active={orderBy === headCell.id}
+                            // Set sort direction based on the current orderBy and order values
                             direction={orderBy === headCell.id ? order : 'asc'}
+                            // Attach click event to the createSortHandler function
                             onClick={createSortHandler(headCell.id)}
                         >
                             {headCell.label}
+                            {/* Display visually hidden text for sorting direction */}
                             {orderBy === headCell.id ? (
                                 <Box component="span" sx={visuallyHidden}>
                                     {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
@@ -157,22 +172,25 @@ function EnhancedTableHead(props) {
                         </TableSortLabel>
                     </StyledTableCell>
                 ))}
+                {/* Additional table cell, possibly for actions or additional content */}
                 <StyledTableCell />
             </TableRow>
         </TableHead>
     );
 }
 
+// Define prop types for EnhancedTableHead component to prevent unknown behavior on sorting etc
 EnhancedTableHead.propTypes = {
     onRequestSort: PropTypes.func.isRequired,
-    // onSelectAllClick: PropTypes.func.isRequired,
     order: PropTypes.oneOf(['asc', 'desc']).isRequired,
     orderBy: PropTypes.string.isRequired,
     rowCount: PropTypes.number.isRequired,
 };
 
+
+// Component for each individual row containing description, download links and all the details
 function Row(props) {
-    const { row, index, data, setData, user } = props;
+    const { row, index, data, setData, user, serverRoot } = props;
     const labelId = `enhanced-table-checkbox-${index}`;
     const [purchaseDate, setPurchaseDate] = useState(row.purchasedOn);
     const [ownedBy, setOwnedBy] = useState(row.ownedBy);
@@ -332,6 +350,8 @@ function Row(props) {
     //     }
     // ];
 
+
+    // Gets the bookings of the item, so when you request it, you get when it is occupied etc already stored.
     const bookings = row.bookings;
 
     //set occupied time to next nearest hour   
@@ -346,6 +366,7 @@ function Row(props) {
         // eslint-disable-next-line
     }, [])
 
+    // Check if booking is valid (later than current time, end time is after start time etc)
     const isValidRange = () => {
         const sDate = new Date(booked.startDate);
         const sTime = new Date(booked.startTime);
@@ -369,6 +390,7 @@ function Row(props) {
         return flag;
     }
 
+    // Disables dates when the object is unavailable
     const checkAvailabilityDate = (date) => {
         //return true if disabled
         const dt = date.toDate();
@@ -385,6 +407,7 @@ function Row(props) {
         }))
         return flag;
     };
+
     const checkAvailabilityStart = (timeValue, clockType) => {
         //return true if disabled
         if (clockType === 'hours') {
@@ -423,6 +446,8 @@ function Row(props) {
         return false;
     };
 
+    // Ability to remove item from the website
+    // Add admin only feature.
     const handleRemoveItem = (id) => {
 
         if (window.confirm("Are you sure want to remove this item") === true) {
@@ -432,7 +457,7 @@ function Row(props) {
                 // const options = { "ID": id };
                 // console.log(options);
 
-                axios.delete("http://localhost:8080/item", {
+                axios.delete( serverRoot+"/item", {
                     headers: {Authorization : `Bearer ${token}`},
                     data: {
                         "ID": id
@@ -455,6 +480,8 @@ function Row(props) {
             console.log("Remove item request cancelled");
         }
     }
+
+    // Editing the contents of the item
     const handleSubmitEditModal = (id, documentId) => {
         const options = {
             "name": itemName,
@@ -500,7 +527,7 @@ function Row(props) {
         try {
             const token = JSON.parse(localStorage.getItem('rim-jwt'));
             axios.all([
-                axios.put(`http://localhost:8080/item/${id}`, options, {
+                axios.put(serverRoot+`/item/${id}`, options, {
                     headers: {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}` 
@@ -508,7 +535,7 @@ function Row(props) {
                 }),
                 arr.map(el => {
                     return (
-                        axios.put(`http://localhost:8080/item/${documentId}/${el.name}`, {
+                        axios.put(serverRoot+`/item/${documentId}/${el.name}`, {
                             "file": el.item
                         }, {
                             headers: {
@@ -560,6 +587,8 @@ function Row(props) {
         window.open(row.inspectionReport, "_blank", "noreferrer");
     }
 
+    // When you request an item-
+
     const handleSubmitRequest = async () => {
         const sDate = new Date(booked.startDate);
         const sTime = new Date(booked.startTime);
@@ -585,7 +614,7 @@ function Row(props) {
 
         try {
             const token = JSON.parse(localStorage.getItem('rim-jwt'));
-            axios.post("http://localhost:8080/request", options, { headers : {"Authorization" : `Bearer ${token}`}}).then((res) => {
+            axios.post(serverRoot+"/request", options, { headers : {"Authorization" : `Bearer ${token}`}}).then((res) => {
                 handleCloseRequest();
                 handleClickRequestSuccessMsg();
             }).catch((e) => {
@@ -635,6 +664,8 @@ function Row(props) {
             </TableRow>
             <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+
+                    {/* All the different alerts on different actions */}
                     <Snackbar open={openSuccessMsg} autoHideDuration={6000} onClose={handleCloseSuccessMsg} anchorOrigin={{ vertical, horizontal }}>
                         <Alert onClose={handleCloseSuccessMsg} severity="success" sx={{ width: '100%' }}>
                             Item deleted successfully!
@@ -670,6 +701,11 @@ function Row(props) {
                             Network error. Please try again later!
                         </Alert>
                     </Snackbar>
+
+                    {/* Alerts end */}
+
+
+                    {/* Collapsible content (inside each row) */}
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <div className="flex px-8 py-8 gap-16">
                             <div className='w-full flex flex-col gap-4 justify-between'>
@@ -697,8 +733,12 @@ function Row(props) {
                             </div>
                         </div>
                     </Collapse>
+
+                    {/*Collapsible content end */}
                 </TableCell>
             </TableRow>
+
+            {/* Modal contents for requesting an item */}
             <Dialog open={openRequest} onClose={handleCloseRequest}>
                 <DialogTitle className='bg-[#032538] text-white flex justify-between'>
                     <div className='text-2xl'>Request Form</div>
@@ -804,6 +844,11 @@ function Row(props) {
                     }} disabled={errorRange}>Submit</Button>
                 </DialogActions>
             </Dialog>
+            {/* Modal contents for requesting an item ends */}
+
+
+
+            {/* Modal contents for downloading bills */}
             <Dialog open={openDownload} onClose={handleCloseDownload}>
                 <DialogTitle className='bg-[#032538] text-white flex justify-between items-center'>
                     <div className='text-2xl'>Downloads</div>
@@ -918,6 +963,10 @@ function Row(props) {
                     </div>
                 </DialogContent>
             </Dialog>
+            {/* Modal contents for downloading bills ends */}
+
+
+            {/* Modal for editing item */}
             <Dialog open={openEditModal} onClose={handleCloseEditModal}>
                 <DialogTitle className='bg-[#032538] text-white'>
                     <div className='text-2xl'>Add an Item</div>
@@ -1016,12 +1065,15 @@ function Row(props) {
                     }}>Submit</Button>
                 </DialogActions>
             </Dialog>
+            {/* Modal for editing item ends */}
+
+
         </React.Fragment >
     );
 }
 
 export default function EnhancedTable(props) {
-    const { data, setData, user } = props;
+    const { data, setData, user, serverRoot } = props;
     // console.log(data);
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('name');
@@ -1108,11 +1160,11 @@ export default function EnhancedTable(props) {
                                 orderBy={orderBy}
                                 onRequestSort={handleRequestSort}
                                 rowCount={searchResults.length}
+                                serverRoot= {serverRoot}
                             />
                             <TableBody>
-                                {stableSort(searchResults, getComparator(order, orderBy))
-                                    .map((row, index) =>
-                                        <Row key={index} row={row} index={index} data={searchResults} setData={setData} user={user} />
+                                {stableSort(searchResults, getComparator(order, orderBy)).map((row, index) =>
+                                        <Row key={index} row={row} index={index} data={searchResults} setData={setData} user={user} serverRoot={serverRoot} />
                                     )}
                             </TableBody>
                         </Table>

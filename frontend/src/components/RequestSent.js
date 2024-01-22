@@ -173,7 +173,7 @@ EnhancedTableHead.propTypes = {
 };
 
 function Row(props) {
-    const { row, index, data, setData } = props;
+    const { row, index, data, setData, serverRoot } = props;
     const labelId = `enhanced-table-checkbox-${index}`;
     const [open, setOpen] = useState(false);
 
@@ -229,7 +229,7 @@ function Row(props) {
         if (window.confirm("Are you sure want to delete this request") === true) {
             try {
                 const token = JSON.parse(localStorage.getItem('rim-jwt'));
-                axios.delete("http://localhost:8080/request/delete", {
+                axios.delete(serverRoot+"/request/delete", {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -330,7 +330,7 @@ function Row(props) {
 }
 
 export default function RequestSent(props) {
-    const { data, setData } = props;
+    const { data, setData, serverRoot } = props;
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('name');
 
@@ -423,7 +423,7 @@ export default function RequestSent(props) {
                             <TableBody>
                                 {stableSort(searchResults, getComparator(order, orderBy))
                                     .map((row, index) =>
-                                        <Row key={index} row={row} index={index} data={searchResults} setData={setData}/>
+                                        <Row key={index} row={row} index={index} data={searchResults} setData={setData} serverRoot={serverRoot} />
                                     )}
                             </TableBody>
                         </Table>

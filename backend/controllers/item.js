@@ -199,7 +199,7 @@ module.exports.addItem = async (req, res) => {
     const newItem = new Item({
       name: data.name,
       category: data.category,
-      ownedBy: req.user ? req.user : data.ownedBy, // Change after authentication setup complete
+      ownedBy: req.user ? req.user.club : data.ownedBy, // Change after authentication setup complete
       heldBy: data.heldBy ? data.heldBy : data.ownedBy,
       quantity: data.quantity,
       purchasedOn: data.purchasedOn,

@@ -13,7 +13,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 const Received = (props) => {
     const [data, setData] = useState([]);
-    const { user, setUser } = props;
+    const { user, setUser, authRoot, serverRoot } = props;
     const [openErrorMsg, setOpenErrorMsg] = useState(false);
     const [openNetworkErrorMsg, setOpenNetworkErrorMsg] = useState(false);
     const [query, setQuery] = useState("");
@@ -46,7 +46,7 @@ const Received = (props) => {
     const fetchData = async (club, token) => {
         try {
             const options = { "user": club };
-            const resp = await axios.get("http://localhost:8080/request/received", { params: options, headers: {"Authorization" : `Bearer ${token}`} });
+            const resp = await axios.get(serverRoot+"/request/received", { params: options, headers: {"Authorization" : `Bearer ${token}`} });
             setData(resp.data);
         }
         catch (e) {
@@ -58,7 +58,7 @@ const Received = (props) => {
     const validateToken = async (token) => {
         try {
             const credentials = { jwt: token };
-            const resp = await axios.post("http://localhost:4000/checkToken", credentials);
+            const resp = await axios.post(authRoot+"/checkToken", credentials);
             setUser(resp.data.user);
             fetchData(resp.data.user.club, token);
         }
@@ -108,7 +108,7 @@ const Received = (props) => {
             <Navbar data={data} setData={setData} onQuery={setQuery}/>
             <div className='min-h-screen flex flex-row gap-4 p-4'>
                 <Filter data = {data} setStartDate={setStartDate} setEndDate={setEndDate} clubName={clubName} setClubName={setClubName} catName={catName} setCatName={setCatName}></Filter>
-                <RequestReceived data={data} setData={setData} user={user} query={query} clubName={clubName} catName={catName} startDate={startDate} endDate={endDate}></RequestReceived>
+                <RequestReceived data={data} setData={setData} user={user} serverRoot={serverRoot} query={query} clubName={clubName} catName={catName} startDate={startDate} endDate={endDate}></RequestReceived>
             </div>
         </div>
     )

@@ -35,7 +35,7 @@ const Login = (props) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [dirty, setDirty] = useState(false);
-    const { setUser } = props;
+    const { setUser, authRoot, serverRoot } = props;
     const [openSuccessMsg, setOpenSuccessMsg] = useState(false);
     const [openErrorMsg, setOpenErrorMsg] = useState(false);
     const [openNetworkErrorMsg, setOpenNetworkErrorMsg] = useState(false);
@@ -78,7 +78,7 @@ const Login = (props) => {
     const validateToken = async (token) => {
         try {
             const credentials = { jwt: token };
-            axios.post("http://localhost:4000/checkToken", credentials)
+            axios.post(authRoot+"/checkToken", credentials)
                 .then((res) => {
                     setUser(res.data.user);
                     navigate('/');
@@ -122,7 +122,7 @@ const Login = (props) => {
             handleCloseErrorMsg();
             const credentials = { userID: email, password: password };
             // console.log(credentials);
-            axios.post("http://localhost:4000/login", credentials)
+            axios.post(authRoot+"/login", credentials)
                 .then((res) => {
                     localStorage.setItem('rim-jwt', JSON.stringify(res.data.jwt));
                     handleClickSuccessMsg();

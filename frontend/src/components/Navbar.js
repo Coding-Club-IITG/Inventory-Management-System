@@ -18,7 +18,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 function Navbar(props) {
-  const { data, setData } = props;
+  const { data, setData, serverRoot } = props;
   const [openAddModal, setOpenAddModal] = useState(false);
   const [purchaseDate, setPurchaseDate] = useState(dayjs());
   const [ownedBy, setOwnedBy] = useState('');
@@ -124,7 +124,7 @@ function Navbar(props) {
     try {
       // alert("Backend not updated yet");
       const token = JSON.parse(localStorage.getItem('rim-jwt'));
-      axios.post("http://localhost:8080/item", options, {
+      axios.post(serverRoot+"/item", options, {
         headers: {
           "Content-Type": "multipart/form-data",
           "Authorization": `Bearer ${token}`
