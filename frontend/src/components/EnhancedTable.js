@@ -65,10 +65,10 @@ const theme = createTheme({
 
 // Comparator for sortings
 function descendingComparator(a, b, orderBy) {
-    if (b[orderBy] < a[orderBy]) {
+    if (b[orderBy].toLowerCase() < a[orderBy].toLowerCase()) {
         return -1;
     }
-    if (b[orderBy] > a[orderBy]) {
+    if (b[orderBy].toLowerCase() > a[orderBy].toLowerCase()) {
         return 1;
     }
     return 0;
@@ -96,7 +96,6 @@ function stableSort(array, comparator) {
     return stabilizedThis.map((el) => el[0]);
 }
 
-// Sample for testing
 const headCells = [
     {
         id: 'name',
@@ -130,12 +129,11 @@ const headCells = [
     },
 ];
 
-// EnhancedTableHead component definition, for the headings like ItemName, Category etc.
+
 function EnhancedTableHead(props) {
-    // Destructuring props to extract values
+
     const { order, orderBy, onRequestSort } = props;
 
-    // Function to create a sort handler for a specific property
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
@@ -338,17 +336,6 @@ function Row(props) {
 
         return date.getTime();
     }
-
-    // let timeSlot = [
-    //     {
-    //         Start: 1675286076000,
-    //         End: 1675472840000
-    //     },
-    //     {
-    //         Start: 1675712800000,
-    //         End: 1676012276000
-    //     }
-    // ];
 
 
     // Gets the bookings of the item, so when you request it, you get when it is occupied etc already stored.

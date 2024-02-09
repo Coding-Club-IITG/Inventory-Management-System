@@ -17,6 +17,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 // app.use(cookieParser);
 const mongoose = require("mongoose");
+const sendEmail = require('./utils/sendEmail');
 const URI =
     `mongodb+srv://cc-rim-portal:yFKI00xcm00W4qPT@cluster0.ipm9jh9.mongodb.net/?retryWrites=true&w=majority`;
 app.use(bodyParser.json());
@@ -32,14 +33,23 @@ mongoose
     .catch((err) => {
         console.log(err);
     });
-
+function generatePassword() {
+    var length = 10,
+        charset = "abcdefghijklmnopqrstuvwxyz$@!#ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+        retVal = "";
+    for (var i = 0, n = charset.length; i < length; ++i) {
+        retVal += charset.charAt(Math.floor(Math.random() * n));
+    }
+    return retVal;
+}
 app.post('/register', async (req, res) => {
     const userID = req.body.userID;
-    const password = req.body.password;
+    const password = generatePassword();
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({ name: req.body.name, club: req.body.club, userID: req.body.userID, mobileNumber: req.body.mobileNumber, password: hashedPassword });
     try {
         user.save();
+        sendEmail("codingclub@iitg.ac.in", "Registered on IMS Portal", `You have been registered on IMS Portal. Your login details are as follows:<br>User ID: ${userID}<br>Password: ${password}<br><br>Please note that this is a randomly generated password only known to you. Use this for logging in to the portal.<br><br>Warm Regards,<br>Coding Club IITG`)
         res.status(201).send(user);
     }
     catch (err) {

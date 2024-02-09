@@ -8,7 +8,9 @@ const corsOptions = {
 	optionSuccessStatus: 200,
 }
 const itemsCronJob = require('./controllers/cronJob');
+const morgan=require('morgan');
 app.use(cors(corsOptions))
+app.use(morgan("dev"));
 // const cookieParser = require("cookie-parser");
 const itemRouter = require("./routes/itemRoutes.js");
 const requestRouter = require("./routes/requestRoutes.js");
