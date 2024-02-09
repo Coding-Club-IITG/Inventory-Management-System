@@ -217,7 +217,7 @@ function Navbar(props) {
               </Link>
             </div>
           </div>
-          <div className="cursor-pointer px-4 py-2 hover:text-white" onClick={handleLogout}>
+          <div className="cursor-pointer px-4 py-2 hover:text-red-500" onClick={handleLogout}>
             Logout
           </div>
         </div>

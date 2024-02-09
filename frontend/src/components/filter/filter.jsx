@@ -13,34 +13,28 @@ const theme = createTheme({
 });
 
 const FilterContent = styled.div`
-
     width: 100%;
-
     display: flex;
     flex-direction: column;
     padding: 32px 24px;
     gap: 30px;
-    
-
 `;
 
 const FilterHead = styled.div`
 
     background-color: #032538;
-    font-size: 24px;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 20px;
     padding: 0px 24px;
-    height: 71px;
     align-content: center;
     color: white;
-
+    
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 10px;
-
+    
     width: 30vw;
-    height: 71px;
+    height: 60px;
 
     background: #032538;
 `;
@@ -53,6 +47,21 @@ const Wrap = styled.div`
     background-color: #FAFAFA;
 
 `;
+
+const ButtonCSV = styled.div`
+  
+  display: flexbox;
+  width: fit-content;
+  padding: 16px 8px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  background-color: #042537;
+  color: #ffffff;
+  border-radius: 4px;
+
+`;
+
 
 function Filter(props) {
   const { data, setStartDate, setEndDate, clubName, setClubName, catName, setCatName } = props;
@@ -90,7 +99,7 @@ function Filter(props) {
           <ClubSelect setClubName={setClubName} clubName={clubName} />
           <CategorySelect catName={catName} setCatName={setCatName} />
           <DayTime setStartDate={setStartDate} setEndDate={setEndDate} />
-          <CSVLink {...csvReport}> Click to download CSV </CSVLink>
+          <ButtonCSV><CSVLink {...csvReport}> Download CSV </CSVLink></ButtonCSV>
         </FilterContent>
       </ThemeProvider>
     </Wrap>

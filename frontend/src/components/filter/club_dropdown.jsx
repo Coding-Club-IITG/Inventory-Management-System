@@ -6,6 +6,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import styled from "styled-components";
+// import fs from 'fs';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -29,6 +30,24 @@ const names = [
   'Automobile',
   '4i Labs',
 ];
+
+// function readAndStoreData(filename) {
+//   try {
+//       const data = fs.readFileSync(filename, 'utf-8');
+//       const clubsArray = data.split('\n').map(line => line.trim());
+//       console.log(clubsArray);
+
+//       return data;
+//   } catch (error) {
+//       console.error(`Error reading the file: ${error.message}`);
+//   }
+// }
+
+// // Specify the file name
+// const filename = 'clubs.txt';
+
+// // Call the function to read and store data
+// const names = readAndStoreData(filename);
 
 function ClubSelector(props) {
   const { clubName, setClubName } = props;
