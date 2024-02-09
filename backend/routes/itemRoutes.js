@@ -24,12 +24,13 @@ const fs = require('fs');
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         let dest;
+        let pathname='../frontend/public/uploads/'
         fs.mkdirSync('uploads/', { recursive: true });
         if (file.fieldname === 'file') {
-            dest = 'uploads/'+req.params.documentType+'s/';
+            dest = pathname+req.params.documentType+'s/';
         } 
         else{
-            dest= 'uploads/'+file.fieldname+'s/';
+            dest= pathname+file.fieldname+'s/';
         }
         fs.mkdirSync(dest, { recursive: true });
         cb(null, dest);
@@ -38,7 +39,7 @@ const storage = multer.diskStorage({
       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
       let type=file.fieldname;
       if (file.fieldname==="file"){type=req.params.documentType}
-      cb(null, type+'-'+file.originalname.split('.')[0] + '-' + uniqueSuffix + '.' + file.originalname.split('.')[1]);
+      cb(null, type + '-' + uniqueSuffix + '.' + file.originalname.split('.')[1]);
     }
   });
 const upload = multer({ storage: storage });
@@ -50,7 +51,7 @@ itemRouter.route("/")
     .get(authenticateToken, listAllItems)
     .delete(authenticateToken, deleteItem);
 itemRouter.put("/return", authenticateToken, returnItem);
-itemRouter.get("/download", authenticateToken, download);
+// itemRouter.get("/download", authenticateToken, download);
 itemRouter.put("/:id", authenticateToken, editItem)
 // itemRouter.put("/document/:documentId",editDocument)
 itemRouter.put('/:documentId/:documentType', authenticateToken, upload.single("file"), editDocument)

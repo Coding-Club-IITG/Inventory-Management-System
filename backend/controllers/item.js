@@ -68,10 +68,11 @@ module.exports.addItem = async (req, res) => {
   console.log("Add item API called");
   console.log(req.files["bill"]);
   let billURL="", sanctionURL="", purchaseURL="", inspectionURL="";
-  if ((req.files["bill"]))  billURL = req.files["bill"].filename;
-  if ((req.files["sanctionLetter"])) sanctionURL = req.files['sanctionLetter'].filename;
-  if ((req.files["purchaseOrder"])) purchaseURL = req.files['purchaseOrder'].filename;
-  if ((req.files["inspectionReport"])) inspectionURL = req.files['inspectionReport'].filename;
+  if ((req.files["bill"]))  billURL = req.files["bill"][0].path.slice(19);
+  if ((req.files["sanctionLetter"])) sanctionURL = req.files['sanctionLetter'][0].path.slice(19);
+  if ((req.files["purchaseOrder"])) purchaseURL = req.files['purchaseOrder'][0].path.slice(19);
+  if ((req.files["inspectionReport"])) inspectionURL = req.files['inspectionReport'][0].path.slice(19);
+  console.log(billURL);
   let savedItemDocument = {};
   const timestamp = Date.now();
   console.log("AddItem called");
@@ -231,7 +232,7 @@ module.exports.addItem = async (req, res) => {
 module.exports.listAllItems = async (req, res) => {
   try {
     // Find and return all items with no filter 
-    const items = await Item.find();
+    const items = await Item.find().populate("itemDocument");
     // console.log(items);
     res.status(201).json(items);
   } catch {

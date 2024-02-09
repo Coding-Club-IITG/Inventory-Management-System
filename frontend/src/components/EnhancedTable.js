@@ -575,16 +575,16 @@ function Row(props) {
         setOpenRequest(true);
     };
     const handleViewBill = () => {
-        window.open(row.bill, "_blank", "noreferrer");
+        window.open(row.itemDocument.bill, "_blank", "noreferrer");
     }
     const handleViewSanctionLetter = () => {
-        window.open(row.sanctionLetter, "_blank", "noreferrer");
+        window.open(row.itemDocument?.sanctionLetter, "_blank", "noreferrer");
     }
     const handleViewPurchaseOrder = () => {
-        window.open(row.purchaseOrder, "_blank", "noreferrer");
+        window.open(row.itemDocument?.purchaseOrder, "_blank", "noreferrer");
     }
     const handleViewInspectionReport = () => {
-        window.open(row.inspectionReport, "_blank", "noreferrer");
+        window.open(row.itemDocument?.inspectionReport, "_blank", "noreferrer");
     }
 
     // When you request an item-
@@ -859,7 +859,7 @@ function Row(props) {
                         <div className='flex justify-between items-center gap-24'>
                             <p className='text-2xl'>Bill</p>
                             <div className='flex gap-4'>
-                                {row.bill ?
+                                {row.itemDocument&&row.itemDocument.bill?
                                     <>
                                         <Button variant="outlined" onClick={handleViewBill} style={{
                                             // backgroundColor: "#021018",
@@ -885,7 +885,7 @@ function Row(props) {
                         <div className='flex justify-between items-center gap-24'>
                             <p className='text-2xl'>Sanction Letter</p>
                             <div className='flex gap-4'>
-                                {row.sanctionLetter ?
+                                {row.itemDocument&&row.itemDocument.sanctionLetter ?
                                     <>
                                         <Button variant="outlined" onClick={handleViewSanctionLetter} style={{
                                             // backgroundColor: "#021018",
@@ -911,7 +911,7 @@ function Row(props) {
                         <div className='flex justify-between items-center gap-24'>
                             <p className='text-2xl'>Purchase order</p>
                             <div className='flex gap-4'>
-                                {row.purchaseOrder ?
+                                {row.itemDocument&&row.itemDocument.purchaseOrder ?
                                     <>
                                         <Button variant="outlined" onClick={handleViewPurchaseOrder} style={{
                                             // backgroundColor: "#021018",
@@ -937,7 +937,7 @@ function Row(props) {
                         <div className='flex justify-between items-center gap-24'>
                             <p className='text-2xl'>Inspection Report</p>
                             <div className='flex gap-4'>
-                                {row.inspectionReport ?
+                                {row.itemDocument&&row.itemDocument.inspectionReport ?
                                     <>
                                         <Button variant="outlined" onClick={handleViewInspectionReport} style={{
                                             // backgroundColor: "#021018",

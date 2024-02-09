@@ -25,4 +25,5 @@ yarn-debug.log*
 yarn-error.log*
 
 # local files
-/backedn/uploads
+/backend/uploads
+/frontend/public/uploads
