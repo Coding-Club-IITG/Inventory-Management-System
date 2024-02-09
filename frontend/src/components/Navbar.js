@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, Select, MenuItem, InputLabel, Snackbar } from '@mui/material';
 import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -39,6 +39,7 @@ function Navbar(props) {
   const [purchaseOrder, setPurchaseOrder] = useState(null);
   const [inspectionReport, setInspectionReport] = useState(null);
   const [formValues, setFormValues] = useState([]);
+
 
   const handleClickSuccessMsg = () => {
     setOpenSuccessMsg(true);
@@ -182,6 +183,8 @@ function Navbar(props) {
   const vertical = 'top'
   const horizontal = 'center';
 
+  const location = useLocation();
+
   return (
     <>
       <Snackbar open={openSuccessMsg} autoHideDuration={6000} onClose={handleCloseSuccessMsg} anchorOrigin={{ vertical, horizontal }}>
@@ -200,10 +203,10 @@ function Navbar(props) {
             IMS PORTAL
           </Link>
           <Link to="/" className="hover:text-white">
-            <p className={`cursor-pointer px-4 py-2 ${text ? "" : "bg-white/20"}`}>Home</p>
+            <p className={`cursor-pointer px-4 py-2 ${location.pathname === "/" ?  "bg-white/20 text-white" : ""}`}>Home</p>
           </Link>
           <div className="dropdown group text-white/70 hover:text-white">
-            <p className={`cursor-pointer flex items-center justify-center gap-4 px-4 py-2 ${text ? " bg-white/20" : ""}`}>{text ? text : "Requests"} <FaAngleDown /></p>
+            <p className={`cursor-pointer flex items-center justify-center gap-4 px-4 py-2 ${location.pathname === "/sent" || location.pathname === "/received" ? "bg-white/20 text-white" : ""}`}>{text ? text : "Requests"} <FaAngleDown /></p>
 
             <div className="dropdown-content z-10 absolute bg-[#032538] hidden group-hover:block shadow-xl">
               <Link to="/sent" className="block px-4 py-3 text-white/70 hover:text-white hover:bg-[#217cb0]">

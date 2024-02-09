@@ -15,7 +15,7 @@ const authenticateToken = (req, res, next)=>{
             token=  req.headers.authorization.split(' ')[1];
         };
         console.log("Middleware called");
-        console.log(req.headers);
+        // console.log(req.headers);
         if (token == null) return res.status(401).json({ result: "User not found" });
         else {
             jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {

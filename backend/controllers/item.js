@@ -87,6 +87,8 @@ module.exports.addItem = async (req, res) => {
   let inspectionURL = "";
   let savedItemDocument = {};
   const timestamp = Date.now();
+  console.log("AddItem called");
+  console.log(req.body);
 
   // Upload bill to firebase
   if (req.files["bill"]) {
@@ -184,6 +186,9 @@ module.exports.addItem = async (req, res) => {
     sanctionLetter: _.isEmpty(sanctionURL) ? "" : sanctionURL,
     inspectionReport: _.isEmpty(inspectionURL) ? "" : inspectionURL,
     purchaseOrder: _.isEmpty(purchaseURL) ? "" : purchaseURL,
+    serialNo: req.body.serialNo? req.body.serialNo: "",
+    pageNo: req.body.pageNo? req.body.pageNo: "",
+    registerNo: req.body.registerNo? req.body.registerNo:"",
   });
   try {
     savedItemDocument = await itemDocument.save();
