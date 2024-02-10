@@ -7,6 +7,7 @@ import { KeyboardArrowDown as KeyboardArrowDownIcon, KeyboardArrowUp as Keyboard
 import { styled } from '@mui/material/styles';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import dayjs from 'dayjs';
+import { saveAs } from 'file-saver'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -573,8 +574,19 @@ function Row(props) {
     const handleViewInspectionReport = () => {
         window.open(row.itemDocument?.inspectionReport, "_blank", "noreferrer");
     }
-
-    // When you request an item-
+    
+    const handleDownloadBill = () => {
+        saveAs(row.itemDocument.bill, 'bill.jpg');
+    }
+    const handleDownloadSanctionLetter = () => {
+        saveAs(row.itemDocument?.sanctionLetter, 'sanction_letter.jpg');
+    }
+    const handleDownloadPurchaseOrder = () => {
+        saveAs(row.itemDocument?.purchaseOrder, 'purchase_order.jpg');
+    }
+    const handleDownloadInspectionReport = () => {
+        saveAs(row.itemDocument?.inspectionReport, 'inspection_report.jpg');
+    }
 
     const handleSubmitRequest = async () => {
         const sDate = new Date(booked.startDate);
@@ -705,7 +717,7 @@ function Row(props) {
                                     <span className='font-medium mr-4'>Purchased On : </span>
                                     <span> {formatDate(row.purchasedOn)}</span>
                                 </div>
-                                {(user?.club === row.ownedBy) ?
+                                {(user?.superUser) ?
                                     <>
                                         <div className='flex gap-8'>
                                             <div className="cursor-pointer text-red-600 hover:underline flex w-fit items-center gap-2" onClick={() => handleRemoveItem(row._id)}>Remove item <FaTrashAlt /></div>
@@ -838,13 +850,13 @@ function Row(props) {
             {/* Modal contents for downloading bills */}
             <Dialog open={openDownload} onClose={handleCloseDownload}>
                 <DialogTitle className='bg-[#032538] text-white flex justify-between items-center'>
-                    <div className='text-2xl'>Downloads</div>
-                    <span onClick={handleCloseDownload} className="cursor-pointer text-2xl font-thin"><IoClose /></span>
+                    <div className='text-xl'>Downloads</div>
+                    <span onClick={handleCloseDownload} className="cursor-pointer text-xl font-thin"><IoClose /></span>
                 </DialogTitle>
                 <DialogContent>
                     <div className='flex flex-col gap-4 p-4'>
                         <div className='flex justify-between items-center gap-24'>
-                            <p className='text-2xl'>Bill</p>
+                            <p className='text-xl'>Bill</p>
                             <div className='flex gap-4'>
                                 {row.itemDocument&&row.itemDocument.bill?
                                     <>
@@ -855,7 +867,7 @@ function Row(props) {
                                             padding: "0.5rem 2rem",
                                             // boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3)"
                                         }}>View</Button>
-                                        <Button variant="contained" onClick={handleViewBill} style={{
+                                        <Button variant="contained" onClick={handleDownloadBill} style={{
                                             backgroundColor: "#021018",
                                             color: "white",
                                             padding: "0.5rem 2rem",
@@ -870,7 +882,7 @@ function Row(props) {
                             </div>
                         </div>
                         <div className='flex justify-between items-center gap-24'>
-                            <p className='text-2xl'>Sanction Letter</p>
+                            <p className='text-xl'>Sanction Letter</p>
                             <div className='flex gap-4'>
                                 {row.itemDocument&&row.itemDocument.sanctionLetter ?
                                     <>
@@ -881,7 +893,7 @@ function Row(props) {
                                             padding: "0.5rem 2rem",
                                             // boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3)"
                                         }}>View</Button>
-                                        <Button variant="contained" onClick={handleViewSanctionLetter} style={{
+                                        <Button variant="contained" onClick={handleDownloadSanctionLetter} style={{
                                             backgroundColor: "#021018",
                                             color: "white",
                                             padding: "0.5rem 2rem",
@@ -896,7 +908,7 @@ function Row(props) {
                             </div>
                         </div>
                         <div className='flex justify-between items-center gap-24'>
-                            <p className='text-2xl'>Purchase order</p>
+                            <p className='text-xl'>Purchase order</p>
                             <div className='flex gap-4'>
                                 {row.itemDocument&&row.itemDocument.purchaseOrder ?
                                     <>
@@ -907,7 +919,7 @@ function Row(props) {
                                             padding: "0.5rem 2rem",
                                             // boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3)"
                                         }}>View</Button>
-                                        <Button variant="contained" onClick={handleViewPurchaseOrder} style={{
+                                        <Button variant="contained" onClick={handleDownloadPurchaseOrder} style={{
                                             backgroundColor: "#021018",
                                             color: "white",
                                             padding: "0.5rem 2rem",
@@ -922,7 +934,7 @@ function Row(props) {
                             </div>
                         </div>
                         <div className='flex justify-between items-center gap-24'>
-                            <p className='text-2xl'>Inspection Report</p>
+                            <p className='text-xl'>Inspection Report</p>
                             <div className='flex gap-4'>
                                 {row.itemDocument&&row.itemDocument.inspectionReport ?
                                     <>
@@ -933,7 +945,7 @@ function Row(props) {
                                             padding: "0.5rem 2rem",
                                             // boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3)"
                                         }}>View</Button>
-                                        <Button variant="contained" onClick={handleViewInspectionReport} style={{
+                                        <Button variant="contained" onClick={handleDownloadInspectionReport} style={{
                                             backgroundColor: "#021018",
                                             color: "white",
                                             padding: "0.5rem 2rem",
@@ -956,7 +968,7 @@ function Row(props) {
             {/* Modal for editing item */}
             <Dialog open={openEditModal} onClose={handleCloseEditModal}>
                 <DialogTitle className='bg-[#032538] text-white'>
-                    <div className='text-2xl'>Add an Item</div>
+                    <div className='text-xl'>Add an Item</div>
                 </DialogTitle>
                 <DialogContent>
                     {/* <DialogContentText>
@@ -1159,7 +1171,7 @@ export default function EnhancedTable(props) {
                 </Paper>
                 {searchResults.length === 0 ?
                     <>
-                        <p className='text-white/80 text-2xl text-center font-medium'> No records to display</p>
+                        <p className='text-white/80 text-xl text-center font-medium'> No records to display</p>
                     </>
                     : ""}
             </Box>
