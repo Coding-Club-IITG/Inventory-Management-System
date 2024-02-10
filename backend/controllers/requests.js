@@ -1,6 +1,7 @@
 const Request = require("../models/requestSchema.js");
 const Item = require("../models/itemSchema.js");
 const User = require("../models/userSchema.js");
+const sendEmail = require("../utils/sendEmail.js");
 
 module.exports.getSentRequests = async (req, res) => {
     try {
@@ -33,6 +34,9 @@ module.exports.acceptRequest = async (req, res) => {
             { _id: req.body.requestId },
             { requestStatus: `Approved` }
         );
+        const user= await User.findOne({club: targetRequest.requestedBy});
+        console.log(user);
+        sendEmail(user.userID, "IMS: Request for Item Approved", `Greetings,<br><br>Your request for the item <b>${targetRequest.name}</b> has been <b>approved</b>. Check the IMS Portal for more details.<br><br>Warm Regards,<br>Coding Club IIT Guwahati`);
         const item = await Item.findOneAndUpdate(
             { _id: targetRequest?.itemId },
             { "status": "Booked for future use.", $push: { "bookings": targetRequest } }
@@ -56,6 +60,9 @@ module.exports.rejectRequest = async (req, res) => {
             // {requestStatus:`Declined by ${req.user.club}`}
             { requestStatus: `Declined` }
         );
+        const user= await User.findOne({club: targetRequest.requestedBy});
+        console.log(user);
+        sendEmail(user.userID, "IMS: Request for Item Declined", `Greetings,<br><br>Your request for the item <b>${targetRequest.name}</b> has been <b>declined</b>. Check the IMS Portal for more details.<br><br>Warm Regards,<br>Coding Club IIT Guwahati`);
         res.json(targetRequest);
     }
     catch (err) {
@@ -63,12 +70,15 @@ module.exports.rejectRequest = async (req, res) => {
         console.log(err);
     }
 }
-module.exports.newRequest = (req, res) => {
+module.exports.newRequest = async (req, res) => {
     const request = req.body;
     // request.requestedBy = req.user.club;
     const newRequest = new Request(request);
     try {
         newRequest.save();
+        const user= await User.findOne({club: newRequest.ownedBy});
+        console.log(user);
+        sendEmail(user.userID, "IMS: Requesting Approval", `Greetings,<br><br>This is to inform you that ${newRequest.requestedBy} is waiting for your kind approval for <b>${newRequest.name}</b>. Kindly check the IMS Portal for more details.<br><br>Warm Regards,<br>Coding Club IIT Guwahati`);
         res.send(newRequest);
     }
     catch (err) {

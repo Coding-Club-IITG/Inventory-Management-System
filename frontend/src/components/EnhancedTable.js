@@ -705,7 +705,7 @@ function Row(props) {
                                     <span className='font-medium mr-4'>Purchased On : </span>
                                     <span> {formatDate(row.purchasedOn)}</span>
                                 </div>
-                                {(user?.club === row.ownedBy) ?
+                                {(user?.superUser) ?
                                     <>
                                         <div className='flex gap-8'>
                                             <div className="cursor-pointer text-red-600 hover:underline flex w-fit items-center gap-2" onClick={() => handleRemoveItem(row._id)}>Remove item <FaTrashAlt /></div>

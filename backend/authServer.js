@@ -46,10 +46,10 @@ app.post('/register', async (req, res) => {
     const userID = req.body.userID;
     const password = generatePassword();
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({ name: req.body.name, club: req.body.club, userID: req.body.userID, mobileNumber: req.body.mobileNumber, password: hashedPassword });
+    const user = new User({ name: req.body.name, club: req.body.club, userID: req.body.userID, mobileNumber: req.body.mobileNumber, password: hashedPassword, superUser: req.body.superUser });
     try {
         user.save();
-        sendEmail("codingclub@iitg.ac.in", "Registered on IMS Portal", `You have been registered on IMS Portal. Your login details are as follows:<br>User ID: ${userID}<br>Password: ${password}<br><br>Please note that this is a randomly generated password only known to you. Use this for logging in to the portal.<br><br>Warm Regards,<br>Coding Club IITG`)
+        sendEmail(userID, "Registered on IMS Portal", `You have been registered on IMS Portal. Your login details are as follows:<br>User ID: ${userID}<br>Password: ${password}<br><br>Please note that this is a randomly generated password only known to you. Use this for logging in to the portal.<br><br>Warm Regards,<br>Coding Club IITG`)
         res.status(201).send(user);
     }
     catch (err) {
@@ -61,7 +61,7 @@ app.post('/login', async (req, res) => {
     console.log("Login API called");
     const userID = req.body.userID;
     const user = await User.findOne({ userID: userID });
-    const user1 = user ? { userID: user.userID, club: user.club } : null;
+    const user1 = user ? { userID: user.userID, club: user.club, superUser: user.superUser } : null;
     if (user == null) {
         console.log("User not found");
         return res.status(401).json({ result: "Invalid" });
