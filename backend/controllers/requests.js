@@ -103,3 +103,36 @@ module.exports.deleteRequest = async (req, res) => {
         console.log(err);
     }
 }
+
+module.exports.returnItem = async (req, res) => {
+    try {
+      console.log(req.body);
+      //Update status to available, and held by back to original 
+      const updatedRequest = await Request.findByIdAndUpdate(
+        {_id:req.body.data.ID},
+        {requestStatus: "Item Returned"},
+        {new:true}
+      );
+      const updatedItem = await Item.findOneAndUpdate(
+        { _id: updatedRequest.itemId },
+        { heldBy: updatedRequest.ownedBy, status: "Available" },
+        {new:true}
+      );
+      
+      
+      if (!updatedItem) res.status(404).send({ result: "Item Not Found" });
+      
+      
+  
+      // Remove the first request from the bookings array
+      if ((updatedItem.bookings).length!=0)
+        updatedItem.bookings.shift();
+      await updatedItem.save();
+  
+      res.status(200).send({result:"Success"});
+    } catch (err) {
+      console.log(err);
+      res.status(500).send(err);
+    }
+  };
+  

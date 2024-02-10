@@ -32,7 +32,7 @@ const itemsCronJob = () => {
       // Update the status of each expired item
       await Promise.all(
         expiredItems.map(async (expiredItem) => {
-          const expiredRequests = expiredItem.bookings.filter(request => request.outTime <= currentTimestamp);
+          // const expiredRequests = expiredItem.bookings.filter(request => request.outTime <= currentTimestamp);
           
 
           expiredItem.bookings = expiredItem.bookings.filter(request => request.outTime > currentTimestamp);

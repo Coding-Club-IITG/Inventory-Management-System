@@ -48,6 +48,7 @@ const Received = (props) => {
             const options = { "user": club };
             const resp = await axios.get(serverRoot+"/request/received", { params: options, headers: {"Authorization" : `Bearer ${token}`} });
             setData(resp.data);
+            console.log(resp.data);
         }
         catch (e) {
             // console.log("Received.js - Network error in fetchData");

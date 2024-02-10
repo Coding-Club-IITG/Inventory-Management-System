@@ -319,18 +319,20 @@ function Row(props) {
     const handleReturnRequest = (id) => {
         if (window.confirm("Please confirm that this item was returned") === true) {
             try {
+                console.log(row);
                 const token = JSON.parse(localStorage.getItem('rim-jwt'));
-                axios.delete(serverRoot+"/request/delete", {
+                axios.put   (serverRoot+"/request/return", {
                     headers: {
                         Authorization: `Bearer ${token}`
                     },
                     data: {
-                        "ID": id
+                        "ID": id,
                     }
                 })
                     .then((res) => {
-                        const newData = data.filter(el => el._id !== id);
-                        setData(newData);
+                        console.log(res);
+                        // const newData = data.filter(el => el.itemId !== id);
+                        // setData(newData);
                         handleClickRemoveMsg();
                     }).catch((e) => {
                         handleCloseErrorMsg();
@@ -428,6 +430,7 @@ function Row(props) {
     const horizontal = 'center';
 
     return (
+        
         <React.Fragment>
             <TableRow style={index % 2 ? { background: "#A2D5F2" } : { background: "#FAFAFA" }}>
                 <TableCell
@@ -441,7 +444,7 @@ function Row(props) {
                 <TableCell align="left">{row.requestedBy}</TableCell>
                 <TableCell align="center">{row.quantity}</TableCell>
                 <TableCell align="center">{formatDuration(row.outTime - row.inTime)}</TableCell>
-                <TableCell align="left"><p className={`italic font-medium ${row.requestStatus === 'Pending' ? "text-gray-500" : (row.requestStatus === 'Approved' ? "text-green-500" : "text-red-500")}`}>{row.requestStatus}</p></TableCell>
+                <TableCell align="left"><p className={`italic font-medium ${row.requestStatus === 'Pending' ? "text-gray-500" : (row.requestStatus === 'Approved' ? "text-green-500" : (row.requestStatus === 'Item Returned' ?"text-yellow-500":"text-red-500"))}`}>{row.requestStatus}</p></TableCell>
                 <TableCell >
                     <IconButton
                         aria-label="expand row"
@@ -511,7 +514,7 @@ function Row(props) {
                                             (row.requestStatus === 'Approved' ?
                                                 (<React.Fragment>
                                                     <button type="submit" className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" onClick={() => handleReturnRequest(row._id)}>Item Returned</button>
-                                                    <button type="submit" className="bg-transparent hover:bg-red-500 text-red-700 ml-6 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded" onClick={() => handleForceDeclineRequest(row._id)}>Force Decline</button>
+                                                    {/* <button type="submit" className="bg-transparent hover:bg-red-500 text-red-700 ml-6 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded" onClick={() => handleForceDeclineRequest(row._id)}>Force Decline</button> */}
                                                 </React.Fragment>) :
                                                 "")}
                                     </div>

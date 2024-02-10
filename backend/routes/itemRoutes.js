@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require("express");
 const jwt = require('jsonwebtoken');
 const itemRouter = express.Router();
-const { download, addItem, listAllItems, deleteItem, returnItem, editItem, editDocument } = require("../controllers/item.js");
+const { addItem, listAllItems, deleteItem, editItem, editDocument } = require("../controllers/item.js");
 const authenticateToken = require('../middleware/authToken.js');
 const multer = require("multer");
 const fs = require('fs');
@@ -50,7 +50,6 @@ itemRouter.route("/")
     .post(authenticateToken, filesUploader, addItem)
     .get(authenticateToken, listAllItems)
     .delete(authenticateToken, deleteItem);
-itemRouter.put("/return", authenticateToken, returnItem);
 // itemRouter.get("/download", authenticateToken, download);
 itemRouter.put("/:id", authenticateToken, editItem)
 // itemRouter.put("/document/:documentId",editDocument)

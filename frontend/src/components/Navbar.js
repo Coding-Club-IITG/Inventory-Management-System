@@ -42,7 +42,7 @@ function Navbar(props) {
 
 
   const handleClickSuccessMsg = () => {
-    setOpenSuccessMsg(true);
+    setOpenSuccessMsg(true);   
   };
 
   const handleCloseSuccessMsg = (event, reason) => {
@@ -51,6 +51,7 @@ function Navbar(props) {
     }
 
     setOpenSuccessMsg(false);
+    window.location.reload();
   };
 
   const handleClickErrorMsg = () => {

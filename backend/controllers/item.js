@@ -39,30 +39,30 @@ const _ = require("lodash");
 //     return res.status(400).json({ error: "Image file is required" });
 //   }
 // };
-module.exports.download = async (req, res) => {
-  const timestamp = Date.now();
-  if (req.files["bill"]) {
-    const fileNameBill = `${req.files["bill"][0].originalname.split(".")[0]
-      }_${timestamp}.${req.files["bill"][0].originalname.split(".")[1]}`;
-    const billRef = ref(storage, fileNameBill);
+// module.exports.download = async (req, res) => {
+//   const timestamp = Date.now();
+//   if (req.files["bill"]) {
+//     const fileNameBill = `${req.files["bill"][0].originalname.split(".")[0]
+//       }_${timestamp}.${req.files["bill"][0].originalname.split(".")[1]}`;
+//     const billRef = ref(storage, fileNameBill);
 
-    try {
-      const billSnapshot = await uploadBytesResumable(
-        billRef,
-        req.files["bill"][0].buffer,
-        {
-          contentType: req.files["bill"][0]?.mimetype,
-        }
-      );
-      billURL = await getDownloadURL(billSnapshot.ref);
-    } catch (err) {
-      res.status(500).send(err);
-      console.log(err);
-    }
-  } else {
-    return res.status(400).json({ error: "Bill file is required" });
-  }
-};
+//     try {
+//       const billSnapshot = await uploadBytesResumable(
+//         billRef,
+//         req.files["bill"][0].buffer,
+//         {
+//           contentType: req.files["bill"][0]?.mimetype,
+//         }
+//       );
+//       billURL = await getDownloadURL(billSnapshot.ref);
+//     } catch (err) {
+//       res.status(500).send(err);
+//       console.log(err);
+//     }
+//   } else {
+//     return res.status(400).json({ error: "Bill file is required" });
+//   }
+// };
 
 module.exports.addItem = async (req, res) => {
   console.log("Add item API called");
@@ -308,26 +308,5 @@ module.exports.editDocument = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send("Server error while updating document");
-  }
-};
-
-module.exports.returnItem = async (req, res) => {
-  try {
-
-    //Update status to available, and held by back to original 
-    const updatedItem = await Item.findOneAndUpdate(
-      { _id: req.body.itemId },
-      { heldBy: req.body.heldBy, status: "Available" }
-    );
-    if (!updatedItem) res.status(404).send({ result: "Item Not Found" });
-
-
-    // Remove the first request from the bookings array
-    updatedItem.bookings.shift();
-    await updatedItem.save();
-
-    res.json({ updatedItem, updatedBooking });
-  } catch (err) {
-    res.status(500).send(err);
   }
 };
