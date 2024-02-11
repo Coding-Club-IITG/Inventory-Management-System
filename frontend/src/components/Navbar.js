@@ -12,6 +12,8 @@ import { FaTrashAlt } from "react-icons/fa";
 import axios from 'axios';
 import MuiAlert from '@mui/material/Alert';
 import Input from "./Input";
+import clubData from '../data/ClubNames.json';
+import catData from '../data/Categories.json';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -265,11 +267,11 @@ function Navbar(props) {
                   label="Category"
                   onChange={handleCategory}
                 >
-                  <MenuItem value={"Major Equipment"}>Major Equipment</MenuItem>
-                  <MenuItem value={"Minor Equipment"}>Minor Equipment</MenuItem>
-                  <MenuItem value={"Consumables"}>Consumables</MenuItem>
-                  <MenuItem value={"Furniture"}>Furniture</MenuItem>
-                  <MenuItem value={"Books"}>Books</MenuItem>
+                  {catData.categories.map((cat, index) => (
+                    <MenuItem key={index} value={cat}>
+                      {cat}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </div>
@@ -286,15 +288,11 @@ function Navbar(props) {
                     label="Owned By"
                     onChange={handleOwnership}
                   >
-                    <MenuItem value={"Coding Club"}>Coding Club</MenuItem>
-                    <MenuItem value={"Design Club"}>Design Club</MenuItem>
-                    <MenuItem value={"Electronics Club"}>Electronics Club</MenuItem>
-                    <MenuItem value={"Robotics Club"}>Robotics Club</MenuItem>
-                    <MenuItem value={"Consulting & Analytics"}>Consulting & Analytics</MenuItem>
-                    <MenuItem value={"E-Cell"}>E-Cell</MenuItem>
-                    <MenuItem value={"Aeromodelling Club"}>Aeromodelling Club</MenuItem>
-                    <MenuItem value={"IITG.Ai Club"}>IITG.Ai Club</MenuItem>
-                    <MenuItem value={"Automobile Club"}>Automobile Club</MenuItem>
+                    {clubData.clubs.map((club, index) => (
+                      <MenuItem key={index} value={club}>
+                        {club}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
                 <DateTimePicker

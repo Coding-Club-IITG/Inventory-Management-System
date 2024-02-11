@@ -192,7 +192,7 @@ function Row(props) {
     const { row, index, data, setData, user, serverRoot } = props;
     const labelId = `enhanced-table-checkbox-${index}`;
     const [purchaseDate, setPurchaseDate] = useState(row.purchasedOn);
-    const [ownedBy, setOwnedBy] = useState(row.ownedBy);
+    const [ownedBy, setOwnedBy] = useState('');
     const [itemName, setItemName] = useState(row.name);
     const [open, setOpen] = useState(false);
     const [openRequest, setOpenRequest] = useState(false);
@@ -309,6 +309,7 @@ function Row(props) {
 
     const handleOwnership = (event) => {
         setOwnedBy(event.target.value);
+        console.log(event);
     };
     const handleCategory = (event) => {
         setCategory(event.target.value);
@@ -1010,6 +1011,7 @@ function Row(props) {
                                     <MenuItem value={"Automobile Club"}>Automobile Club</MenuItem>
                                 </Select>
                             </FormControl>
+                            {/* {/* <YourComponent/> */}
                             <FormControl fullWidth>
                                 <InputLabel id="category">Category</InputLabel>
                                 <Select
