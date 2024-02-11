@@ -116,7 +116,7 @@ module.exports.deleteRequest = async (req, res) => {
 
 module.exports.returnItem = async (req, res) => {
     try {
-      console.log(req.body);
+    //   console.log(req.body);
       //Update status to available, and held by back to original 
       const updatedRequest = await Request.findByIdAndUpdate(
         {_id:req.body.data.ID},
@@ -128,7 +128,6 @@ module.exports.returnItem = async (req, res) => {
         { heldBy: updatedRequest.ownedBy, status: "Available" },
         {new:true}
       );
-      
       
       if (!updatedItem) res.status(404).send({ result: "Item Not Found" });
       

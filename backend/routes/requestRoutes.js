@@ -17,5 +17,5 @@ requestRouter.post("/", authenticateToken, newRequest);
 requestRouter.delete("/delete", authenticateToken, deleteRequest);
 requestRouter.put("/accept", authenticateToken, acceptRequest);
 requestRouter.put("/reject", authenticateToken, rejectRequest);
-requestRouter.put("/return",returnItem);
+requestRouter.put("/return", authenticateToken, returnItem);
 module.exports = requestRouter;

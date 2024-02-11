@@ -321,12 +321,14 @@ function Row(props) {
             try {
                 console.log(row);
                 const token = JSON.parse(localStorage.getItem('rim-jwt'));
-                axios.put   (serverRoot+"/request/return", {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    },
+                axios.put(serverRoot+"/request/return", {
                     data: {
                         "ID": id,
+                    }
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
                     }
                 })
                     .then((res) => {
