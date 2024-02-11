@@ -18,8 +18,7 @@ app.use(express.json());
 // app.use(cookieParser);
 const mongoose = require("mongoose");
 const sendEmail = require('./utils/sendEmail');
-const URI =
-    `mongodb+srv://cc-rim-portal:yFKI00xcm00W4qPT@cluster0.ipm9jh9.mongodb.net/?retryWrites=true&w=majority`;
+const URI = process.env.MONGO_URI;
 app.use(bodyParser.json());
 
 const port = 4000;
