@@ -1,24 +1,23 @@
-version: '3.8'
-
+version: "3.8"
 services:
-  frontend:
-    build: ./rim_frontend
-    ports:
-      - "8000:8000"
-    depends_on:
-      - backend
-
-  backend:
-    build: ./rim_backend
-    ports:
-      - "4000:4000"
-      - "8080:8080"
-    depends_on:
-      - database
-    environment:
-      MONGO_URL: mongodb://database:27017/database
-
-  database:
-    image: mongo
+  mongodb:
+    image: "mongo"
+    volumes:
+      - data:/data/db
     ports:
       - "27017:27017"
+  backend:
+    build: ./backend
+    ports:
+      - "8080:8080"
+      - "4000:4000"
+    depends_on:
+      - mongodb
+  frontend:
+    build: ./frontend
+    ports:
+      - "8000:8000"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
