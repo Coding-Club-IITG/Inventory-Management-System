@@ -41,18 +41,31 @@ function generatePassword() {
     }
     return retVal;
 }
-app.post('/register', async (req, res) => {
+app.post(process.env.REG_URL, async (req, res) => {
     const userID = req.body.userID;
     const password = generatePassword();
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({ name: req.body.name, club: req.body.club, userID: req.body.userID, mobileNumber: req.body.mobileNumber, password: hashedPassword, superUser: req.body.superUser });
     try {
-        user.save();
+        await user.save();
         sendEmail(userID, "Registered on IMS Portal", `You have been registered on IMS Portal. Your login details are as follows:<br>User ID: ${userID}<br>Password: ${password}<br><br>Please note that this is a randomly generated password only known to you. Use this for logging in to the portal.<br><br>Warm Regards,<br>Coding Club IITG`)
-        res.status(201).send(user);
+        return res.status(201).send(user);
     }
     catch (err) {
-        res.send(err);
+        return res.status(500).send(err);
+    }
+})
+app.post('/updatePassword', async (req, res) => {
+    const userID = req.body.userID;
+    const password = generatePassword();
+    const hashedPassword = await bcrypt.hash(password, 10);
+    try {
+        const user = await User.findOneAndUpdate({userID: userID},{password: password});
+        sendEmail(userID, "Password Updated on IMS Portal", `Your password has been updated on IMS Portal. Your login details are as follows:<br>User ID: ${userID}<br>Password: ${password}<br><br>Please note that this is a randomly generated password only known to you. Use this for logging in to the portal.<br><br>Warm Regards,<br>Coding Club IITG`)
+        return res.status(201).send(user);
+    }
+    catch (err) {
+        return res.status(500).send(err);
     }
 })
 
